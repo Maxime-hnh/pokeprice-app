@@ -8,6 +8,11 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
   app.useGlobalFilters(new PrismaExceptionFilter());
+  app.enableCors({
+    origin: 'https://pokeprice-test.netlify.app/', 
+    methods: 'GET,POST,PUT,DELETE',
+    credentials: true
+  });
 
   await app.listen(process.env.PORT ?? 3001);
 }
