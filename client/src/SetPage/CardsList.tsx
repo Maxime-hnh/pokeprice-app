@@ -62,7 +62,7 @@ const CardList = ({ set, data, myCards, handleFavoriteToggle, handleImageLoad, l
               style={{ zIndex: 999 }}
               w={24}
               h={24}
-              src={myCards.includes(sanitizeKey(card.id))
+              src={myCards.includes(card.id)
                 ? "/assets/pokeball-red.svg"
                 : "/assets/pokeball-gray.svg"
               }
