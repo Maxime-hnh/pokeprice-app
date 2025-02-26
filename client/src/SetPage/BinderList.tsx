@@ -32,7 +32,7 @@ const BinderList = ({ set }: BinderListProps) => {
   }
 
   return (
-    <>
+    <Container mx={{ base: 0, xl: 200 }}>
       {/* Première page (seulement 12 cartes à droite) */}
       <Grid gutter="xl">
         <Grid.Col span={6}>
@@ -81,7 +81,7 @@ const BinderList = ({ set }: BinderListProps) => {
           </Fragment>
         );
       })}
-    </>
+    </Container>
   );
 
 }
