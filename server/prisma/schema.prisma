@@ -1,0 +1,154 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int     @id @default(autoincrement())
+  uid          String  @unique @default(uuid())
+  firstName    String
+  lastName     String
+  email        String  @unique
+  password     String
+  refreshToken String?
+
+  roleId Int
+  role   Role @relation(fields: [roleId], references: [id])
+
+  ownedCardVariants UserCardVariant[] @relation("UserToUserCardVariant") // Un User peut posséder plusieurs variantes de cartes
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Role {
+  id    Int    @id @default(autoincrement())
+  uid   String @unique @default(uuid())
+  name  String @unique
+  users User[]
+
+  @@map("roles")
+}
+
+model Serie {
+  id   Int     @id @default(autoincrement())
+  uid  String  @unique @default(uuid())
+  code String  @unique
+  name String
+  logo String?
+
+  sets Set[] @relation("SerieToSet") // Une Série a plusieurs Sets
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("series")
+}
+
+model Set {
+  id          Int      @id @default(autoincrement())
+  uid         String   @unique @default(uuid())
+  code        String   @unique
+  name        String
+  logo        String?
+  symbol      String?
+  cardCount   Json
+  tcgOnline   String?
+  releaseDate DateTime
+  legal       Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  serieId Int
+  serie   Serie @relation("SerieToSet", fields: [serieId], references: [id])
+
+  cards Card[] @relation("SetToCard") // Un Set peut contenir plusieurs Cartes
+
+  @@map("sets")
+}
+
+model Card {
+  id          Int     @id @default(autoincrement())
+  uid         String  @unique @default(uuid())
+  localId     String
+  code        String  @unique
+  name        String
+  image       String?
+  category    String?
+  illustrator String?
+  rarity      String?
+
+  averagePrice      Decimal?
+  highestPrice      Decimal?
+  lowestPrice       Decimal?
+  ebaySearchContent String?
+
+  setId Int
+  set   Set @relation("SetToCard", fields: [setId], references: [id])
+
+  variants CardVariantOnCard[] // Relation ManyToMany entre Card et CardVariant
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("cards")
+}
+
+model CardVariant {
+  id   Int    @id @default(autoincrement())
+  uid  String @unique @default(uuid())
+  type String
+
+  cards CardVariantOnCard[] // Relation ManyToMany avec Card
+
+  owners UserCardVariant[] @relation("CardVariantToUserCardVariant")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("card_variants")
+}
+
+model CardVariantOnCard {
+  cardId Int
+  card   Card @relation(fields: [cardId], references: [id])
+
+  cardVariantId   Int
+  cardVariant     CardVariant       @relation(fields: [cardVariantId], references: [id])
+  UserCardVariant UserCardVariant[]
+
+  @@id([cardId, cardVariantId])
+  @@map("card_variant_on_card")
+}
+
+model UserCardVariant {
+  userId Int
+  user   User @relation("UserToUserCardVariant", fields: [userId], references: [id])
+
+  cardId            Int
+  cardVariantId     Int
+  cardVariantOnCard CardVariantOnCard @relation(fields: [cardId, cardVariantId], references: [cardId, cardVariantId])
+
+  quantity Int @default(1)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cardVariant CardVariant @relation("CardVariantToUserCardVariant", fields: [cardVariantId], references: [id])
+
+  @@id([userId, cardId, cardVariantId])
+  @@map("user_card_variants")
+}
