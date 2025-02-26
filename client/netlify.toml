@@ -1,5 +1,13 @@
-[[redirects]]
-  from = "/api/*"
-  to = "${VITE_SERVER_URL}api/:splat"
-  status = 200
-  force = true
+[context.production]
+  [[redirects]]
+    from = "/api/*"
+    to = "${VITE_SERVER_URL}api/:splat"
+    status = 200
+    force = true
+
+[context.deploy-preview]
+  [[redirects]]
+    from = "/api/*"
+    to = "${VITE_SERVER_URL}api/:splat"
+    status = 200
+    force = true
