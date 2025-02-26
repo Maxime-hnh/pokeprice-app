@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app:
-    container_name: nest-app
+    container_name: pokeprice-app
     build: .
     ports:
       - "3001:3001"
