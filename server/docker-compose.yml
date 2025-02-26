@@ -1,6 +1,7 @@
 services:
   app:
     container_name: pokeprice-app
+    image: pokeprice-image
     build: .
     ports:
       - "3001:3001"
