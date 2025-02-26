@@ -20,7 +20,8 @@ const HomePage = () => {
     loadSeries();
   }, [])
 
-  
+  console.log("API URL:", import.meta.env.VITE_SERVER_URL);
+
   return (
     <Container p={0}>
       <Accordion variant="separated" radius={"xl"}>
