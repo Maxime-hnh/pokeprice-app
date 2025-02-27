@@ -8,6 +8,7 @@ import { FetchedUserCardVariantProps } from "../_interfaces/user-card-variants.i
 import { userCardVariantsService } from "../_services/user-cards-variants.service";
 import { authService } from "../_services/auth.service";
 import { countOwnedCards } from "../_helpers/helpers";
+import { notifications } from "@mantine/notifications";
 
 interface BinderListProps {
   cards: Card[];
@@ -30,7 +31,7 @@ const BinderList = ({ cards, handleImageLoad, loadedImages }: BinderListProps) =
   const [myCards, setMyCards] = useState<FetchedUserCardVariantProps[]>([]);
 
   const loadUserCardVariants = async () => {
-    if (loggedUser) {
+    if (authService.loggedUserValue) {
       setIsLoading(true);
       const favData = await getAllUserCardsByUserId();
       if (favData) {
@@ -65,6 +66,9 @@ const BinderList = ({ cards, handleImageLoad, loadedImages }: BinderListProps) =
 
 
   const handleFavoriteToggle = async (cardId: number, cardVariantId: number) => {
+    if (!authService.loggedUserValue) {
+      return notifications.show({ message: "Vous devez être connecté pour ajouter la carte", color: 'red' })
+    }
     const key = `${cardId}_${cardVariantId}`
     setCardVariantIdIsLoading(prev => ({ ...prev, [key]: true }));
 

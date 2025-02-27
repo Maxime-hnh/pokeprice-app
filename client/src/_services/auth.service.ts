@@ -64,7 +64,7 @@ class AuthService {
       },
       // body: JSON.stringify(refreshToken),
     };
-    const response = await fetch('api/auth/refreshToken', requestOptions);
+    const response = await fetch('/api/auth/refreshToken', requestOptions);
     const user = await handleResponse(response);
     localStorage.setItem('loggedUser', JSON.stringify((user)));
     this.loggedUserSubject.next(user);
