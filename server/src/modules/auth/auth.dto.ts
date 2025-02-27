@@ -20,3 +20,23 @@ export class PayloadDto {
   @IsNotEmpty()
   exp: number;
 };
+
+export class AuthDto {
+
+  @IsInt()
+  @IsNotEmpty()
+  id: number;
+
+  @IsEmail()
+  email: string;
+  @IsString()
+  @IsNotEmpty()
+  role: string;
+
+  @IsString()
+  @IsNotEmpty()
+  accessToken: string;
+
+  @IsString()
+  refreshToken?: string;
+};

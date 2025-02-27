@@ -9,19 +9,17 @@ import { IconArrowRightBar, IconRefresh, IconTrendingDown, IconTrendingUp } from
 import { notifications } from "@mantine/notifications";
 import dayjs from "dayjs";
 import { Card } from "../_interfaces/card.interface";
+import { FetchedUserCardVariantProps } from "../_interfaces/user-card-variants.interface";
 
 
 interface CardListProps {
   set: Set;
   data: Card;
-  myCards: string[];
-  handleFavoriteToggle: (setId: string, cardId: string) => void;
-  handleImageLoad: (cardId: string) => void;
+  handleImageLoad: (cardId: number) => void;
   loadedImages: Record<string, boolean>;
-  isLoading: boolean;
 }
 
-const CardList = ({ set, data, myCards, handleFavoriteToggle, handleImageLoad, loadedImages, isLoading }: CardListProps) => {
+const CardsList = ({ set, data, handleImageLoad, loadedImages }: CardListProps) => {
 
   const [card, setCard] = useState<Card>(data)
   const { getImageUrl } = tcgdexService;
@@ -45,30 +43,27 @@ const CardList = ({ set, data, myCards, handleFavoriteToggle, handleImageLoad, l
     }
   }
 
-  console.log(set)
-
-
   return (
-    <Accordion.Item key={card.id} value={card.id}>
+    <Accordion.Item key={card.id} value={card.id.toString()}>
       <Accordion.Control>
         <Group align="center" gap={3} justify="space-between" mr={15}>
           <Group>
             <Text fz={"xs"} className="titleFont">{card.name}</Text>
             <Text fz={"xs"}>{card.localId}/{set?.cardCount.official}</Text>
           </Group>
-          {isLoading
+          {/* {isLoading
             ? <Skeleton radius={"xl"} w={24} h={24} />
             : <Image
               style={{ zIndex: 999 }}
               w={24}
               h={24}
-              src={myCards.includes(card.id)
+              src={myCards.some(myCard => myCard.cardId === card.id && card.cardVariantId === cardVariantId)
                 ? "/assets/pokeball-red.svg"
                 : "/assets/pokeball-gray.svg"
               }
               onClick={() => handleFavoriteToggle(set!.id, card.id)}
             />
-          }
+          } */}
         </Group>
       </Accordion.Control>
 
@@ -117,7 +112,7 @@ const CardList = ({ set, data, myCards, handleFavoriteToggle, handleImageLoad, l
               bottom={0}
               wrap="nowrap"
               align="center"
-              // onClick={() => updatePrices(set.serie.id, set.id, card.id)}
+            // onClick={() => updatePrices(set.serie.id, set.id, card.id)}
             >
               <IconRefresh
                 color="#828282"
@@ -142,4 +137,4 @@ const CardList = ({ set, data, myCards, handleFavoriteToggle, handleImageLoad, l
     </Accordion.Item>
   )
 }
-export default CardList;
+export default CardsList;

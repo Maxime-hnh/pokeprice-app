@@ -5,13 +5,14 @@ import { ebayService } from "../_services/ebay.service";
 import { Set } from "../_interfaces/set.interface";
 import { IconSearch } from "@tabler/icons-react";
 import { Card } from "../_interfaces/card.interface";
+import { FetchedUserCardVariantProps } from "../_interfaces/user-card-variants.interface";
 
 
 interface OnlyCardProps {
   set: Set;
   filteredCards: Card[];
-  myCards: string[];
-  handleImageLoad: (cardId: string) => void;
+  myCards: FetchedUserCardVariantProps[];
+  handleImageLoad: (cardId: number) => void;
   loadedImages: Record<string, boolean>;
 }
 
@@ -20,10 +21,8 @@ const OnlyCard = ({ set, filteredCards, handleImageLoad, loadedImages }: OnlyCar
   const { getImageUrl } = tcgdexService;
   const { searchOnEbay } = ebayService;
 
-  console.log(set)
-
   return (
-    <SimpleGrid cols={{ base: 2, xs: 3, sm: 4, md: 5, xl: 6 }} spacing={"xs"}>
+    <SimpleGrid cols={{ base: 2, xs: 3, sm: 4, md: 5, lg: 6, xl: 7 }} spacing={"xs"}>
       {filteredCards?.length > 0
         && filteredCards.map(card =>
           <Box

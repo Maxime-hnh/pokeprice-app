@@ -32,7 +32,7 @@ class AuthService {
     return this.loggedUserSubject.value;
   }
 
-  signup = async (body: User) => {
+  signup = async (body: AuthenticationRequest) => {
     const requestOptions = {
       method: 'POST',
       headers: authHeader(),
@@ -56,13 +56,13 @@ class AuthService {
     return user;
   }
 
-  refreshToken = async (refreshToken: string): Promise<AuthenticatedUser | void> => {
+  refreshToken = async (): Promise<AuthenticatedUser | void> => {
     const requestOptions = {
       method: 'POST',
       headers: {
         ...authHeader()
       },
-      body: JSON.stringify(refreshToken),
+      // body: JSON.stringify(refreshToken),
     };
     const response = await fetch('api/auth/refreshToken', requestOptions);
     const user = await handleResponse(response);

@@ -7,7 +7,7 @@ import { JwtAuthGuard } from '../auth/auth.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
 
 
-@Controller('user')
+@Controller('users')
 export class UserController {
 
   constructor(
@@ -19,12 +19,20 @@ export class UserController {
     return await this.usersService.create(body);
   };
 
+  @Get('/email/:email')
+  async getByEmail(@Param('email') email: string): Promise<UserWithRole | void> {
+    const user = await this.usersService.getByEmail(decodeURI(email));
+    if (!user) throw new NotFoundException(`user with email ${decodeURI(email)} not found.`)
+    return user;
+  };
+
   @Get(':id')
   async getById(@Param('id') id: number): Promise<UserWithRole | void> {
-    const user = await this.usersService.findById(+id);
+    const user = await this.usersService.getById(+id);
     if (!user) throw new NotFoundException(`user with id ${id} not found.`)
     return user;
   };
+
 
   @UseGuards(JwtAuthGuard)
   @Put(':id')
@@ -36,5 +44,7 @@ export class UserController {
     if (user.id !== +id) throw new ForbiddenException()
     return await this.usersService.update(+id, body);
   };
+
+
 
 }

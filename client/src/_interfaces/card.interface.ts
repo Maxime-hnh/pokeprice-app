@@ -46,7 +46,7 @@ interface Variants {
 
 
 export interface Card {
-  id: string;
+  id: number;
   uid: string;
   code: string;
   localId: string;
@@ -66,7 +66,13 @@ export interface Card {
 
   setId: number;
 
+  //when binderList
 };
+
+export interface CardWithVariantId extends Card {
+  variantType: string;
+  cardVariantId: number;
+}
 
 export interface CardBrief {
   id: string;

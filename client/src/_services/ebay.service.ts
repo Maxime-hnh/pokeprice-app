@@ -8,14 +8,14 @@ class EbayService {
   }
 
 
-  searchOnEbay = (cardName: string, cardId: string, localId: string, cardCountOfficial?: number): void => {
+  searchOnEbay = (cardName: string, cardId: number, localId: string, cardCountOfficial?: number): void => {
     if (cardCountOfficial) {
 
       const containsAlphabet = /[a-zA-Z]/.test(localId);
       const ebayUrl = `https://www.ebay.fr/sch/i.html?_nkw=${encodeURIComponent(
         cardName
         + ' '
-        + cardId.slice(-3)
+        + cardId.toString().slice(-3)
         + (containsAlphabet
           ? ''
           : '/' + cardCountOfficial

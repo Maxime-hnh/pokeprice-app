@@ -30,5 +30,9 @@ export function authHeader(type: 'json' | 'form' | 'text' = "json"): HeadersInit
     header["Authorization"] = "Bearer " + loggedUser.accessToken;
   }
 
+  if (loggedUser && loggedUser.refreshToken) {
+    header["x-refresh-token"] = loggedUser.refreshToken
+  }
+
   return header;
 }

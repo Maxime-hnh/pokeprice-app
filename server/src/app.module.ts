@@ -15,6 +15,7 @@ import { CardVariantsModule } from './modules/card-variants/card-variants.module
 import { CardsModule } from './modules/cards/cards.module';
 import { SetsModule } from './modules/sets/sets.module';
 import { SeriesModule } from './modules/series/series.module';
+import { UserCardVariantsModule } from './modules/user-card-variants/user-card-variants.module';
 
 
 @Module({
@@ -29,7 +30,8 @@ import { SeriesModule } from './modules/series/series.module';
     SetsModule,
     CardsModule,
     CardVariantsModule,
-    CardVariantOnCardsModule
+    CardVariantOnCardsModule,
+    UserCardVariantsModule
   ],
   controllers: [AppController, UserController, UsersController, TCGDexController],
   providers: [AppService],

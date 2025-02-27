@@ -24,7 +24,6 @@ import { Notifications } from '@mantine/notifications';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useDisclosure } from '@mantine/hooks';
 import HomePage from '../HomePage/HomePage';
-import SwitchTheme from '../_components/SwitchTheme';
 import SetPage from '../SetPage/SetPage';
 import AuthPage from '../AuthPage/AuthPage';
 import { ModalsProvider } from '@mantine/modals';
@@ -82,7 +81,7 @@ const App = () => {
           <AppShell.Header zIndex={9999}>
             <Group justify='space-between' h="100%" px="md">
               <Group>
-                <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+                {/* <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" /> */}
                 <Image
                   w={120}
                   src={"/assets/pokeprice_logo.png"}
@@ -91,7 +90,7 @@ const App = () => {
                 />
               </Group>
               <Group>
-                <SwitchTheme />
+                {/* <SwitchTheme /> */}
                 <LoginPopover />
               </Group>
             </Group>

@@ -20,6 +20,7 @@ export class UsersService {
     return await this.prisma.user.create({
       data: {
         ...data,
+        roleId: 3,
         password: hashedPassword
       },
       include: { role: true }
@@ -37,7 +38,7 @@ export class UsersService {
     return this.prisma.user.findMany();
   };
 
-  async findById(id: number): Promise<UserWithRole | null> {
+  async getById(id: number): Promise<UserWithRole | null> {
     return this.prisma.user.findUnique({
       where: { id },
       include: { role: true }
@@ -45,7 +46,7 @@ export class UsersService {
   };
 
 
-  async findByEmail(email: string): Promise<UserWithRole | null> {
+  async getByEmail(email: string): Promise<UserWithRole | null> {
     return this.prisma.user.findUnique({
       where: { email },
       include: { role: true }

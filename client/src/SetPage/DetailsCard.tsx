@@ -10,18 +10,16 @@ import { cardService } from "../_services/card.service";
 import { useState } from "react";
 import { notifications } from "@mantine/notifications";
 import { Card } from "../_interfaces/card.interface";
+import { FetchedUserCardVariantProps } from "../_interfaces/user-card-variants.interface";
 
 interface DetailsCardProps {
   set: Set;
   data: Card;
-  myCards: string[];
-  handleFavoriteToggle: (setId: string, cardId: string) => void;
-  handleImageLoad: (cardId: string) => void;
+  handleImageLoad: (cardId: number) => void;
   loadedImages: Record<string, boolean>;
-  isLoading: boolean;
 }
 
-const DetailsCard = ({ set, data, myCards, handleFavoriteToggle, handleImageLoad, loadedImages, isLoading }: DetailsCardProps) => {
+const DetailsCard = ({ set, data, handleImageLoad, loadedImages }: DetailsCardProps) => {
 
   const [card, setCard] = useState<Card>(data);
   const { getImageUrl } = tcgdexService;
@@ -147,7 +145,7 @@ const DetailsCard = ({ set, data, myCards, handleFavoriteToggle, handleImageLoad
           </Stack>
 
           <Group pos={"absolute"} right={4}>
-            {isLoading
+            {/* {isLoading
               ? <Skeleton radius={"xl"} w={24} h={24} />
               : <Image
                 style={{ zIndex: 999 }}
@@ -159,7 +157,7 @@ const DetailsCard = ({ set, data, myCards, handleFavoriteToggle, handleImageLoad
                 }
                 onClick={() => handleFavoriteToggle(set.id, card.id)}
               />
-            }
+            } */}
           </Group>
 
           <Group

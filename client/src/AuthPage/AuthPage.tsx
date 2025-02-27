@@ -6,12 +6,14 @@ import styles from './AuthPage.module.scss';
 import { useLocation, useNavigate } from "react-router-dom"
 import { notifications } from "@mantine/notifications"
 import { AuthenticationRequest, authService } from "../_services/auth.service"
+import { userService } from "../_services/user.service";
 
 const AuthPage = observer(() => {
 
-  const { login } = authService;
+  const { login, signup } = authService;
   const navigate = useNavigate();
   const location = useLocation();
+  const { getUserByEmail } = userService;
 
   const form = useForm<AuthenticationRequest>({
     initialValues: {
@@ -27,9 +29,14 @@ const AuthPage = observer(() => {
   })
 
   const handleSubmit = async (values: AuthenticationRequest) => {
-    await login(values)
-    navigate(location.state.from);
-    notifications.show({ message: "Connexion réussie !", color: "green" })
+    const user = await getUserByEmail(values.email);
+    if (!user) {
+      await signup(values);
+    } else {
+      await login(values);
+      navigate(location.state.from);
+      notifications.show({ message: "Connexion réussie !", color: "green" })
+    }
   };
 
   return (
