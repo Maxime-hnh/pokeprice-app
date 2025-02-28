@@ -1,6 +1,7 @@
 import { Controller, Get, HttpCode, Param } from '@nestjs/common';
 import { SetsService } from './sets.service';
 import { Set } from '@prisma/client';
+import { SetWithCards } from './interfaces/sets.interface';
 
 @Controller('sets')
 export class SetsController {
@@ -14,7 +15,7 @@ export class SetsController {
 
   @Get(':id')
   @HttpCode(200)
-  async getById(@Param('id') id: string): Promise<Set | null> {
+  async getById(@Param('id') id: string): Promise<SetWithCards | null> {
     return await this.setService.getById(Number(id))
   };
 }

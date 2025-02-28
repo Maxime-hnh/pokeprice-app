@@ -2,7 +2,6 @@ import { Controller, Post, Body, NotFoundException, Headers, UnauthorizedExcepti
 import { AuthService } from './auth.service';
 import { UsersService } from '../users/users.service';
 import { CreateUserDto, LoginUserDto } from '../users/dto/users.dto';
-import { AuthDto } from './auth.dto';
 import { UserWithRole } from '../users/users.types';
 
 @Controller('auth')

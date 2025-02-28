@@ -17,7 +17,6 @@ export class SeriesController {
   async getById(@Param('id') id: string): Promise<Serie | null> {
     return await this.seriesService.getById(Number(id))
   };
-
 }
 
 

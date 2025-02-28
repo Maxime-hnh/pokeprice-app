@@ -6,7 +6,6 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
-import { UserController } from './modules/users/user.controller';
 import { UsersController } from './modules/users/users.controller';
 import { TCGDexModule } from './modules/tcgdex/tcgdex.module';
 import { TCGDexController } from './modules/tcgdex/tcgdex.controller';
@@ -16,11 +15,14 @@ import { CardsModule } from './modules/cards/cards.module';
 import { SetsModule } from './modules/sets/sets.module';
 import { SeriesModule } from './modules/series/series.module';
 import { UserCardVariantsModule } from './modules/user-card-variants/user-card-variants.module';
+import { JobsService } from './modules/jobs/jobs.service';
+import { JobsModule } from './modules/jobs/jobs.module';
+import { EbayModule } from './modules/ebay/ebay.module';
 
 
 @Module({
   imports: [
-    ConfigModule.forRoot({isGlobal:true}),
+    ConfigModule.forRoot({ isGlobal: true }),
     UsersModule,
     RolesModule,
     AuthModule,
@@ -31,9 +33,11 @@ import { UserCardVariantsModule } from './modules/user-card-variants/user-card-v
     CardsModule,
     CardVariantsModule,
     CardVariantOnCardsModule,
-    UserCardVariantsModule
+    UserCardVariantsModule,
+    JobsModule,
+    EbayModule
   ],
-  controllers: [AppController, UserController, UsersController, TCGDexController],
-  providers: [AppService],
+  controllers: [AppController, UsersController, TCGDexController],
+  providers: [AppService, JobsService],
 })
 export class AppModule { }

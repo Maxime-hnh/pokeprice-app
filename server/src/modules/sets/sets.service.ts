@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Set } from '@prisma/client';
+import { SetWithCards } from './interfaces/sets.interface';
 
 @Injectable()
 export class SetsService {
@@ -10,7 +11,7 @@ export class SetsService {
     return this.prisma.set.findMany()
   };
 
-  async getById(id: number): Promise<Set | null> {
+  async getById(id: number): Promise<SetWithCards | null> {
     return this.prisma.set.findUnique({
       where: { id },
       include: {
@@ -26,8 +27,17 @@ export class SetsService {
           }
         }
       }
-    });
-  }
+    }) as Promise<SetWithCards | null>;
+  };
+
+  async getAllBySerieId(id: number): Promise<SetWithCards[]> {
+    return this.prisma.set.findMany({
+      where: { serieId: id },
+      include: {
+        cards: true
+      }
+    }) as Promise<SetWithCards[]>;
+  };
 
 
   async getByCode(code: string): Promise<Set | null> {
