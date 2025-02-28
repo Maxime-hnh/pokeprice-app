@@ -12,23 +12,32 @@ export class SetsService {
   };
 
   async getById(id: number): Promise<SetWithCards | null> {
-    return this.prisma.set.findUnique({
+    const set = await this.prisma.set.findUnique({
       where: { id },
       include: {
         cards: {
           include: {
             variants: {
               include: {
-                cardVariant: {
-                  select: { type: true }
-                }
+                cardVariant: { select: { type: true } }
               }
             }
           }
         }
       }
-    }) as Promise<SetWithCards | null>;
-  };
+    });
+
+    if (!set) return null;
+
+    set.cards.sort((a, b) => {
+      const numA = parseInt(a.localId.replace(/\D/g, ""), 10) || 0;
+      const numB = parseInt(b.localId.replace(/\D/g, ""), 10) || 0;
+      return numA - numB;
+    });
+
+    return set;
+  }
+
 
   async getAllBySerieId(id: number): Promise<SetWithCards[]> {
     return this.prisma.set.findMany({
