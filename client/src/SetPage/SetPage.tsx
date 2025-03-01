@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { Set } from "../_interfaces/set.interface";
 import { tcgdexService } from "../_services/tcgdex.service";
 import styles from './SetPage.module.scss';
-import { ebayService } from "../_services/ebay.service";
+import { searchService } from "../_services/search.service";
 import { IconBook, IconCards, IconId, IconList, IconPlayCardStarFilled, IconSearch } from "@tabler/icons-react";
 import { authStore } from "../_store/auth.store";
 import AppContext from "../App/AppContext";
@@ -30,14 +30,14 @@ const SetPage = () => {
   const { isMobile } = useContext(AppContext);
   const { getImageUrl } = tcgdexService;
   const { getSetById } = setService;
-  const { searchOnEbay } = ebayService;
+  const { searchOnEbay } = searchService;
 
   const [set, setSet] = useState<Set | null>(null);
   const [searchValue, setSearchValue] = useState<string>("");
   const [filteredCards, setFilteredCards] = useState<Card[]>([]);
   const { colorScheme } = useMantineColorScheme();
   const [myCards, setMyCards] = useState<FetchedUserCardVariantProps[]>([]);
-  const [view, setView] = useState<CardView>(CardView.BINDER)
+  const [view, setView] = useState<CardView>(CardView.ONLYCARD)
 
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
 
@@ -107,22 +107,6 @@ const SetPage = () => {
           //   )
           // },
           {
-            value: CardView.BINDER,
-            label: (
-              <Center>
-                <IconBook color={colorScheme === "dark" ? "yellow" : "#495057"} />
-              </Center>
-            )
-          },
-          // {
-          //   value: CardView.LIST,
-          //   label: (
-          //     <Center>
-          //       <IconList color={colorScheme === "dark" ? "yellow" : "#495057"} />
-          //     </Center>
-          //   )
-          // },
-          {
             value: CardView.ONLYCARD,
             label: (
               <Center>
@@ -130,6 +114,23 @@ const SetPage = () => {
               </Center>
             )
           },
+          {
+            value: CardView.BINDER,
+            label: (
+              <Center>
+                <IconBook color={colorScheme === "dark" ? "yellow" : "#495057"} />
+              </Center>
+            )
+          },
+          {
+            value: CardView.LIST,
+            label: (
+              <Center>
+                <IconList color={"#495057"} />
+              </Center>
+            )
+          },
+
         ]} />
       </Stack>
       {view === CardView.DETAILS
@@ -186,7 +187,7 @@ const SetPage = () => {
                         className={styles.card_img}
                         src={getImageUrl(card.image, "png", "low")}
                         onClick={() =>
-                          searchOnEbay(card.name, card.id, card.localId, set?.cardCount.official)
+                          searchOnEbay(card.ebaySearchContent!)
                         }
                         onLoad={() => handleImageLoad(card.id)}
                         fit={"cover"}

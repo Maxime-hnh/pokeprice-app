@@ -1,6 +1,5 @@
 import { Card, CardBrief } from "../_interfaces/card.interface";
 import { handleResponse } from "../_helpers/handleResponse";
-import { sanitizeKey } from "../_helpers/helpers";
 import { authHeader } from "../_helpers/auth-header";
 
 const UPDATE_EBAYPRICES_URL = import.meta.env.VITE_FIREBASE_FUNCTION_UPDATE_EBAYPRICES_FOR_CARDID;
@@ -36,7 +35,7 @@ class CardService {
     }
     try {
       const response = await handleResponse(
-        await fetch(`${UPDATE_EBAYPRICES_URL}?serieId=${encodeURIComponent(serieId)}&setId=${encodeURIComponent(sanitizeKey(setId))}&cardId=${encodeURIComponent(cardId)}`, requestOptions)
+        await fetch(`${UPDATE_EBAYPRICES_URL}?serieId=${encodeURIComponent(serieId)}&setId=${encodeURIComponent(setId)}&cardId=${encodeURIComponent(cardId)}`, requestOptions)
       );
       return response;
     } catch (error) {

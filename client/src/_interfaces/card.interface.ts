@@ -65,7 +65,7 @@ export interface Card {
   ebaySearchContent?: string;
 
   setId: number;
-
+  updatedAt: Date;
   //when binderList
 };
 

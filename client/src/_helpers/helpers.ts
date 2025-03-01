@@ -1,7 +1,6 @@
-import { CardWithVariantId } from "../_interfaces/card.interface";
+import { Card, CardWithVariantId } from "../_interfaces/card.interface";
 import { FetchedUserCardVariantProps } from "../_interfaces/user-card-variants.interface";
 
-export const sanitizeKey = (key: string) => key.replace(/\./g, '_');
 
 export async function retryOriginalRequest(originalResponse: Response, newToken: string): Promise<any> {
   const originalRequest = {
@@ -26,3 +25,9 @@ export const countOwnedCards = (allCards: CardWithVariantId[], ownedCards: Fetch
     return count + (ownedSet.has(key) ? 1 : 0);
   }, 0);
 };
+
+export const formatCardCount = (card: Card, countOfficial: number) => {
+  if (card.localId.startsWith('GG')) return `${card.localId}/${card.ebaySearchContent?.slice(-4)}`
+  if (card.localId.startsWith('TG')) return `${card.localId}/${card.ebaySearchContent?.slice(-4)}`
+  return `${card.localId}/${countOfficial}`
+}

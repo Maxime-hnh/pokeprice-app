@@ -2,9 +2,8 @@ import { Badge, Box, Group, Image, Loader, Paper, Skeleton, Stack, Text, Title, 
 import styles from './SetPage.module.scss';
 import { IconArrowRightBar, IconExternalLink, IconRefresh, IconTrendingDown, IconTrendingUp } from "@tabler/icons-react";
 import { tcgdexService } from "../_services/tcgdex.service";
-import { ebayService } from "../_services/ebay.service";
+import { searchService } from "../_services/search.service";
 import { Set } from "../_interfaces/set.interface";
-import { sanitizeKey } from "../_helpers/helpers";
 import dayjs from "dayjs";
 import { cardService } from "../_services/card.service";
 import { useState } from "react";
@@ -24,7 +23,7 @@ const DetailsCard = ({ set, data, handleImageLoad, loadedImages }: DetailsCardPr
   const [card, setCard] = useState<Card>(data);
   const { getImageUrl } = tcgdexService;
   const { colorScheme } = useMantineColorScheme();
-  const { searchOnEbay } = ebayService;
+  const { searchOnEbay } = searchService;
   const { updateEbayPrices } = cardService;
   const [priceIsLoading, setPriceIsLoading] = useState<boolean>(false);
 
@@ -87,11 +86,11 @@ const DetailsCard = ({ set, data, handleImageLoad, loadedImages }: DetailsCardPr
               src={getImageUrl(card.image, "png", "low")}
               onLoad={() => handleImageLoad(card.id)}
               onClick={() =>
-                searchOnEbay(card.name, card.id, card.localId, set?.cardCount.official)
+                searchOnEbay(card.ebaySearchContent!)
               }
               fit={"cover"}
               w={"65%"}
-              // opacity={myCards.includes(sanitizeKey(card.id)) ? 0.2 : 1}
+            // opacity={myCards.includes(sanitizeKey(card.id)) ? 0.2 : 1}
             />
           </Group>
 
@@ -167,7 +166,7 @@ const DetailsCard = ({ set, data, handleImageLoad, loadedImages }: DetailsCardPr
             pos={"absolute"}
             bottom={1}
             left={5}
-            // onClick={() => updatePrices(set.serie.id, set.id, card.id)}
+          // onClick={() => updatePrices(set.serie.id, set.id, card.id)}
           >
             <IconRefresh
               color="#828282"
@@ -191,7 +190,7 @@ const DetailsCard = ({ set, data, handleImageLoad, loadedImages }: DetailsCardPr
               w={35}
               alt="ebay"
               onClick={() =>
-                searchOnEbay(card.name, card.id, card.localId, set?.cardCount.official)
+                searchOnEbay(card.ebaySearchContent!)
               }
             />
             <IconExternalLink size={15} color={colorScheme === "dark" ? "#101010" : "#fff"} />

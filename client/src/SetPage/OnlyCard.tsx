@@ -1,11 +1,13 @@
-import { Avatar, Box, Image, SimpleGrid, Skeleton } from "@mantine/core";
+import { Avatar, Box, Group, Image, Paper, SimpleGrid, Skeleton, Text, Title } from "@mantine/core";
 import styles from './SetPage.module.scss';
 import { tcgdexService } from "../_services/tcgdex.service";
-import { ebayService } from "../_services/ebay.service";
+import { searchService } from "../_services/search.service";
 import { Set } from "../_interfaces/set.interface";
 import { IconSearch } from "@tabler/icons-react";
 import { Card } from "../_interfaces/card.interface";
 import { FetchedUserCardVariantProps } from "../_interfaces/user-card-variants.interface";
+import { useMemo } from "react";
+import { formatCardCount } from "../_helpers/helpers";
 
 
 interface OnlyCardProps {
@@ -19,20 +21,23 @@ interface OnlyCardProps {
 const OnlyCard = ({ set, filteredCards, handleImageLoad, loadedImages }: OnlyCardProps) => {
 
   const { getImageUrl } = tcgdexService;
-  const { searchOnEbay } = ebayService;
+  const { searchOnEbay, searchOnVinted } = searchService;
+  const reversedCards = useMemo(() => [...filteredCards].reverse(), [filteredCards]);
 
   return (
     <SimpleGrid cols={{ base: 2, xs: 3, sm: 4, md: 5, lg: 6, xl: 7 }} spacing={"xs"}>
-      {filteredCards?.length > 0
-        && filteredCards.map(card =>
-          <Box
+      {reversedCards?.length > 0
+        && reversedCards.map(card =>
+          <Paper
             key={card.id}
             pos={"relative"}
             w={"100%"}
-            pt={"140%"}
+            pt={"160%"}
             style={{ overflow: "hidden" }}
             className={styles.onlyCard_img}
-
+            withBorder
+            radius={"0.6rem"}
+            shadow="md"
           >
             {!loadedImages[card.id] && (
               <Skeleton
@@ -43,38 +48,59 @@ const OnlyCard = ({ set, filteredCards, handleImageLoad, loadedImages }: OnlyCar
                 left={0}
               />
             )}
-            <Image
-              display={loadedImages[card.id] ? "block" : "none"}
+            <Box bg={"white"}
               pos={"absolute"}
               top={0}
               left={0}
               w={"100%"}
               h={"100%"}
-              src={getImageUrl(card.image, "png", "low")}
-              onClick={() =>
-                searchOnEbay(card.name, card.id, card.localId, set?.cardCount.official)
-              }
-              onLoad={() => handleImageLoad(card.id)}
-              fit={"cover"}
-            />
-            <Box w={20} h={15} pos={"absolute"} bg={"white"} style={{ borderRadius: "0 0 5px 0" }} bottom={0} right={0}></Box>
-            <Avatar
-              pos={"absolute"}
-              bottom={0}
-              variant="filled"
-              right={0}
-              radius={"xl"}
-              color="white"
-              size={"md"}
-              onClick={() =>
-                searchOnEbay(card.name, card.id, card.localId, set?.cardCount.official)
-              }
+              display={loadedImages[card.id] ? "block" : "none"}
+
             >
-              <IconSearch size={20} />
-            </Avatar>
-          </Box>
-        )}
-    </SimpleGrid>
+              <Image
+                src={getImageUrl(card.image, "png", "low")}
+                onLoad={() => handleImageLoad(card.id)}
+                fit={"cover"}
+              />
+              <Box
+                bg={"white"}
+                pos={"absolute"}
+                bottom={46}
+                left={0}
+                px={"0.3rem"}
+                py={"0.1rem"}
+                style={{ borderRadius: "0 0.3rem 0 0" }}
+              >
+                <Text fz={"md"} fw={700}>
+                  {formatCardCount(card, set!.cardCount.official!)}
+                </Text>
+              </Box>
+
+            </Box>
+
+            <Group bottom={10} left={0} pos={"absolute"} justify="space-evenly" w={"100%"}>
+
+              <Image
+                w={50}
+                src={"/assets/ebay-logo.svg"}
+                onClick={() =>
+                  searchOnEbay(card.ebaySearchContent!)
+                }
+                style={{ cursor: 'pointer' }}
+              />
+              <Image
+                w={50}
+                src={"/assets/vinted-logo.svg"}
+                onClick={() =>
+                  searchOnVinted(card.ebaySearchContent!)
+                }
+                style={{ cursor: 'pointer' }}
+              />
+            </Group>
+          </Paper>
+        )
+      }
+    </SimpleGrid >
   )
 }
 
