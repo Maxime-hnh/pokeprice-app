@@ -72,8 +72,13 @@ export class CardsService {
     const serie = await this.serieSerive.getById(serieId);
     const sets = await this.setService.getAllBySerieId(serie!.id)
 
+    const totalCards = sets.map(set => set.cards.length).reduce((sum, count) => sum + count, 0);
+
+    console.log(`🚀 La serie ${serie!.name} contient ${totalCards} cartes`)
+    
     await Promise.all(
       sets.map(async (set) => {
+        if (set.name.toLowerCase().includes("promo")) return;
         await Promise.all(
           set.cards.map(async (card) => {
             try {

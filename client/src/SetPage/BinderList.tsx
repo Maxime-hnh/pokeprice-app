@@ -128,7 +128,7 @@ const BinderList = ({ cards, handleImageLoad, loadedImages }: BinderListProps) =
   };
 
   return (
-    <Container mx={{ base: 0, xl: "auto" }}>
+    <Container mx={{ base: 0, xl: "auto" }} px={0}>
       <Group justify="center"><Text mb={"xs"} fz={"md"} className="titleFont">{`${ownedCardsCount}/${duplicatedCards.length}`}</Text></Group>
       {/* Première page (seulement 12 cartes à droite) */}
       <Grid gutter="xl">
@@ -139,7 +139,7 @@ const BinderList = ({ cards, handleImageLoad, loadedImages }: BinderListProps) =
         <Grid.Col span={6}>
           <Grid>
             {firstPage.map((card: any) => (
-              <Grid.Col key={card.id + card.variantType} span={3} p={{ base: 3, md: "xs" }}>
+              <Grid.Col key={card.id + card.variantType} span={3} p={{ base: 3, md: 5, lg: 5, xl: 8 }}>
                 {CardWithSkeleton(card)}
               </Grid.Col>
             ))}
@@ -184,90 +184,3 @@ const BinderList = ({ cards, handleImageLoad, loadedImages }: BinderListProps) =
 };
 
 export default BinderList;
-
-
-{/* <Paper p={"md"} shadow="md" withBorder mb={"xs"}>
-        <Group>
-          <Input
-            leftSection={<IconSearch />}
-            placeholder="Rechercher un pokémon..."
-
-          />
-          <Stack>
-            <Group gap={"xs"}>
-              <Image
-                w={15}
-                h={15}
-                src={"/assets/rarities/rarity_common.png"}
-              />
-              Peu Commune
-            </Group>
-            <Group gap={"xs"}>
-              <Image
-                w={15}
-                h={15}
-                src={"/assets/rarities/rarity_uncommon.png"}
-              />
-              Commune
-            </Group>
-            <Group gap={"xs"}>
-              <Image
-                w={15}
-                h={15}
-                src={"/assets/rarities/rarity_holo.png"}
-              />
-              Holographique
-            </Group>
-            <Group gap={"xs"}>
-              <Image
-                w={15}
-                h={15}
-                src={"/assets/rarities/rarity_double_rare.png"}
-              />
-              Double Rare
-            </Group>
-          </Stack>
-          <Stack>
-            <Group gap={"xs"}>
-              <Image
-                w={15}
-                h={15}
-                src={"/assets/rarities/rarity_AR.png"}
-              />
-              Illustration Rare
-            </Group>
-            <Group gap={"xs"}>
-              <Image
-                w={15}
-                h={15}
-                src={"/assets/rarities/rarity_ultra_rare.png"}
-              />
-              Ultra Rare
-            </Group>
-            <Group gap={"xs"}>
-              <Image
-                w={15}
-                h={15}
-                src={"/assets/rarities/rarity_SAR.png"}
-              />
-              Illustration Spéciale Rare
-            </Group>
-            <Group gap={"xs"}>
-              <Image
-                w={15}
-                h={15}
-                src={"/assets/rarities/rarity_hyper_rare.png"}
-              />
-              Hyper Rare
-            </Group>
-          </Stack>
-          <Group gap={"xs"}>
-            <Image
-              w={15}
-              h={15}
-              src={"/assets/rarities/rarity_high_tech_rare.png"}
-            />
-            High-Tech Rare
-          </Group>
-        </Group>
-      </Paper> */}

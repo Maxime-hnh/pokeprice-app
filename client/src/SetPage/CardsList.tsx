@@ -1,4 +1,4 @@
-import { Accordion, Badge, Group, Image, Loader, Pill, Skeleton, Stack, Text, useMantineColorScheme } from "@mantine/core";
+import { Accordion, Badge, Group, Image, Loader, Pill, Skeleton, Stack, Table, Text, useMantineColorScheme } from "@mantine/core";
 import { Set } from "../_interfaces/set.interface";
 import { useState } from "react";
 import { tcgdexService } from "../_services/tcgdex.service";
@@ -59,7 +59,7 @@ const CardsList = ({ set, data, handleImageLoad, loadedImages }: CardListProps) 
       </Accordion.Control>
 
       <Accordion.Panel>
-        <Group pos={"relative"}>
+        <Group pos={"relative"} wrap="nowrap">
           <Image
             w={"25%"}
             src={getImageUrl(card.image, "png", "low")}
@@ -68,50 +68,82 @@ const CardsList = ({ set, data, handleImageLoad, loadedImages }: CardListProps) 
             }
             fit={"cover"}
           />
-          <Stack justify="flex-start" align="flex-start" gap={0}>
-            <Stack gap={0}>
-              {card.averagePrice !== card.lowestPrice
-                && <Text c={"green"} fz={"sm"} fw={"bold"}>{`Prix le plus faible : ${card.lowestPrice} €`}</Text>
+          <Table variant="vertical" layout="fixed" verticalSpacing={1}>
+            <Table.Caption>
+              <Group
+                gap={3}
+                wrap="nowrap"
+                align="center"
+                justify="center"
+              // onClick={() => updatePrices(set.serie.id, set.id, card.id)}
+              >
+                <IconRefresh
+                  color="#828282"
+                  size={12}
+                  style={{
+                    transition: "transform 0.3s ease-in-out",
+                    transform: priceIsLoading ? "rotate(360deg)" : "rotate(0deg)",
+                    animation: priceIsLoading ? "spin 1s linear infinite" : "none",
+                  }}
+                />
+                <Text fz={10} c={"dimmed"}>Dernière MAJ :</Text>
+                {priceIsLoading
+                  ? <Loader color="blue" size="xs" type="dots" />
+                  : <Text fz={10} c={"dimmed"}>{`${dayjs(card.updatedAt).format('DD/MM/YYYY HH:mm')}`}</Text>
+                }
+              </Group>
+            </Table.Caption>
 
-              }
-              {card.averagePrice
-                && <Text c={"blue"} fz={"sm"} fw={"bold"}>{`Prix moyen : ${card.averagePrice} €`}</Text>
+            <Table.Tbody>
 
-              }
-              {card.averagePrice !== card.highestPrice
-                && <Text c={"red"} fz={"sm"} fw={"bold"}>{`Prix le plus élevé : ${card.highestPrice} €`}</Text>
+              <Table.Tr>
+                <Table.Th fz={"xs"}>Nom </Table.Th>
+                <Table.Td>{card.name}</Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Th fz={"xs"}>Prix le + faible </Table.Th>
+                {card.lowestPrice && <Table.Td c={"green"}>{Number(card.lowestPrice).toFixed(2)} €</Table.Td>}
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Th fz={"xs"}>Prix moyen </Table.Th>
+                {card.averagePrice && <Table.Td c={"blue"}>{Number(card.averagePrice).toFixed(2)} €</Table.Td>}
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Th fz={"xs"}>Prix le + élevé </Table.Th>
+                {card.highestPrice && <Table.Td c={"red"}>{Number(card.highestPrice).toFixed(2)} €</Table.Td>}
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Th>
+                  <Group justify="flex-end">
 
-              }
-            </Stack>
-            <Group
-              gap={3}
-              pos={"absolute"}
-              bottom={0}
-              wrap="nowrap"
-              align="center"
-            // onClick={() => updatePrices(set.serie.id, set.id, card.id)}
-            >
-              <IconRefresh
-                color="#828282"
-                size={12}
-                style={{
-                  transition: "transform 0.3s ease-in-out",
-                  transform: priceIsLoading ? "rotate(360deg)" : "rotate(0deg)",
-                  animation: priceIsLoading ? "spin 1s linear infinite" : "none",
-                }}
-              />
-              <Text fz={10} c={"dimmed"}>Dernière MAJ :</Text>
-              {priceIsLoading
-                ? <Loader color="blue" size="xs" type="dots" />
-                : <Text fz={10} c={"dimmed"}>{`${dayjs(card.updatedAt).format('DD/MM/YYYY HH:mm')}`}</Text>
-              }
-            </Group>
-          </Stack>
+                    <Image
+                      w={50}
+                      src={"/assets/ebay-logo.svg"}
+                      onClick={() =>
+                        searchOnEbay(card.ebaySearchContent!)
+                      }
+                      style={{ cursor: 'pointer' }}
+                    />
+                  </Group>
+                </Table.Th>
+                <Table.Td c={"red"}>
+                  <Image
+                    w={50}
+                    src={"/assets/vinted-logo.svg"}
+                    onClick={() =>
+                      searchOnEbay(card.ebaySearchContent!)
+                    }
+                    style={{ cursor: 'pointer' }}
+                  />
+                </Table.Td>
+              </Table.Tr>
+            </Table.Tbody>
+          </Table>
 
         </Group>
-      </Accordion.Panel>
+      </Accordion.Panel >
 
-    </Accordion.Item>
+    </Accordion.Item >
   )
 }
 export default CardsList;

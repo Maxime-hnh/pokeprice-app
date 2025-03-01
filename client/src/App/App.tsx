@@ -30,6 +30,7 @@ import { ModalsProvider } from '@mantine/modals';
 import LoginPopover from '../_components/LoginPopover';
 import AdminPage from '../AdminPage/AdminPage';
 import ProtectedRoute from '../_components/security/ProtectedRoute';
+import SwitchTheme from '../_components/SwitchTheme';
 
 const App = () => {
 

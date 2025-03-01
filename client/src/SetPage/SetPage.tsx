@@ -126,7 +126,7 @@ const SetPage = () => {
             value: CardView.LIST,
             label: (
               <Center>
-                <IconList color={"#495057"} />
+                <IconList color={colorScheme === "dark" ? "yellow" : "#495057"}  />
               </Center>
             )
           },
