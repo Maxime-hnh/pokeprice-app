@@ -7,7 +7,7 @@ import { IconArrowRightBar, IconRefresh, IconTrendingDown, IconTrendingUp } from
 import { notifications } from "@mantine/notifications";
 import dayjs from "dayjs";
 import { Card } from "../_interfaces/card.interface";
-import { formatCardCount } from "../_helpers/helpers";
+import { formatCardCount, getRarityLogo, growLogoSizeList } from "../_helpers/helpers";
 
 interface CardListProps {
   set: Set;
@@ -44,8 +44,13 @@ const CardsList = ({ set, data, handleImageLoad, loadedImages }: CardListProps) 
         <Group align="center" gap={3} justify="space-between" mr={15}>
           <Group>
             <Text fz={"xs"} className="titleFont">{card.name}</Text>
-            <Text fz={"xs"}>{formatCardCount(card, set!.cardCount.official!)}</Text>
-
+            <Group gap={"xs"}>
+              <Text fz={"xs"}>{formatCardCount(card, set!.cardCount.official!)}</Text>
+              <Image
+                src={getRarityLogo(card.rarity)}
+                w={growLogoSizeList.includes(card.rarity) ? 17 : 12}
+              />
+            </Group>
           </Group>
           {card.averagePrice
             && <Pill fz={"xs"}>{`Prix moyen : ${card.averagePrice} €`}</Pill>

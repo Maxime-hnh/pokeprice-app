@@ -7,7 +7,7 @@ import { IconSearch } from "@tabler/icons-react";
 import { Card } from "../_interfaces/card.interface";
 import { FetchedUserCardVariantProps } from "../_interfaces/user-card-variants.interface";
 import { useMemo } from "react";
-import { formatCardCount } from "../_helpers/helpers";
+import { formatCardCount, getRarityLogo, growLogoSizeList } from "../_helpers/helpers";
 
 
 interface OnlyCardProps {
@@ -57,23 +57,31 @@ const OnlyCard = ({ set, filteredCards, handleImageLoad, loadedImages }: OnlyCar
               display={loadedImages[card.id] ? "block" : "none"}
 
             >
-              <Image
-                src={getImageUrl(card.image, "png", "low")}
-                onLoad={() => handleImageLoad(card.id)}
-                fit={"cover"}
-              />
-              <Box
-                bg={"white"}
-                pos={"absolute"}
-                bottom={46}
-                left={0}
-                px={"0.3rem"}
-                py={"0.1rem"}
-                style={{ borderRadius: "0 0.3rem 0 0" }}
-              >
-                <Text fz={"md"} fw={700}>
-                  {formatCardCount(card, set!.cardCount.official!)}
-                </Text>
+              <Box pos={"relative"}>
+
+                <Image
+                  src={getImageUrl(card.image, "png", "low")}
+                  onLoad={() => handleImageLoad(card.id)}
+                  fit={"cover"}
+                />
+                <Group
+                  bg={"white"}
+                  pos={"absolute"}
+                  bottom={-1}
+                  left={0}
+                  px={"0.3rem"}
+                  py={"0.1rem"}
+                  gap={5}
+                  style={{ borderRadius: "0 0.3rem 0 0", borderBottom: "1px solid white" }}
+                >
+                  <Text fz={"xs"} fw={700}>
+                    {formatCardCount(card, set!.cardCount.official!)}
+                  </Text>
+                  <Image
+                    src={getRarityLogo(card.rarity)}
+                    w={growLogoSizeList.includes(card.rarity) ? 17 : 10}
+                  />
+                </Group>
               </Box>
 
             </Box>
