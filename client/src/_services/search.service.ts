@@ -14,8 +14,8 @@ class SearchService {
   };
 
   searchOnVinted = (ebaySearchContent: string): void => {
-    const ebayUrl = `https://www.vinted.fr/catalog?search_text=${encodeURIComponent(ebaySearchContent)}&search_id=21317989411&order=newest_first&time=1740788193&brand_ids[]=191646&page=1&catalog[]=3233`;
-    window.open(ebayUrl, '_blank');
+    const vintedUrl = `https://www.vinted.fr/catalog?search_text=${encodeURIComponent(ebaySearchContent).replace(/\+/g, "%20")}&search_id=21317989411&order=newest_first&time=1740788193&brand_ids[]=191646&page=1&catalog[]=3233`;
+    window.open(vintedUrl, '_blank');
   }
 
 
