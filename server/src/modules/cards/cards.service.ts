@@ -75,7 +75,7 @@ export class CardsService {
     const totalCards = sets.map(set => set.cards.length).reduce((sum, count) => sum + count, 0);
 
     console.log(`🚀 La serie ${serie!.name} contient ${totalCards} cartes`)
-    
+    let count = 0
     await Promise.all(
       sets.map(async (set) => {
         if (set.name.toLowerCase().includes("promo")) return;
@@ -88,17 +88,20 @@ export class CardsService {
                 if (eBaySearchResult && eBaySearchResult.length > 0) {
                   const priceStats = await this.ebayService.getPriceStats(eBaySearchResult);
                   await this.updateCard(card.id, { lowestPrice: priceStats.lowestPrice, averagePrice: priceStats.averagePrice, highestPrice: priceStats.highestPrice });
+                  count++
                 }
               } else {
                 return;
               }
             } catch (error) {
               console.error(`Erreur lors de la récupération des prix pour la carte ID ${card.id} :`, error);
+              console.log(`${count} cartes mises à jour`)
             }
           })
         );
       })
     );
+    console.log(`${count} cartes mises à jour`)
   };
 
   async addEbaySearchContentValues() {
