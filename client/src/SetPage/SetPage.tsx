@@ -1,19 +1,17 @@
-import { Accordion, Box, Button, Center, Group, Image, Input, Overlay, Paper, SegmentedControl, SimpleGrid, Skeleton, Stack, Text, Title, useMantineColorScheme } from "@mantine/core";
+import { Accordion, Box, Button, Center, Container, Group, Image, Input, Paper, SegmentedControl, SimpleGrid, Skeleton, Stack, Text, Title, useMantineColorScheme } from "@mantine/core";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Set } from "../_interfaces/set.interface";
 import { tcgdexService } from "../_services/tcgdex.service";
 import styles from './SetPage.module.scss';
 import { searchService } from "../_services/search.service";
-import { IconBook, IconCards, IconId, IconList, IconPlayCardStarFilled, IconSearch } from "@tabler/icons-react";
-import { authStore } from "../_store/auth.store";
+import { IconBook, IconList, IconPlayCardStarFilled, IconSearch } from "@tabler/icons-react";
 import AppContext from "../App/AppContext";
 import OnlyCard from "./OnlyCard";
 import DetailsCard from "./DetailsCard";
 import { setService } from "../_services/set.service";
 import { Card } from "../_interfaces/card.interface";
 import BinderList from "./BinderList";
-import { userCardVariantsService } from "../_services/user-cards-variants.service";
 import { FetchedUserCardVariantProps } from "../_interfaces/user-card-variants.interface";
 import CardsList from "./CardsList";
 
@@ -126,7 +124,7 @@ const SetPage = () => {
             value: CardView.LIST,
             label: (
               <Center>
-                <IconList color={colorScheme === "dark" ? "yellow" : "#495057"}  />
+                <IconList color={colorScheme === "dark" ? "yellow" : "#495057"} />
               </Center>
             )
           },
@@ -228,18 +226,23 @@ const SetPage = () => {
               handleImageLoad={handleImageLoad}
               loadedImages={loadedImages}
             />
-            : <Accordion multiple variant="contained">
-              {filteredCards?.length > 0
-                && filteredCards.map(card =>
-                  <CardsList
-                    key={card.id}
-                    set={set!}
-                    data={card}
-                    handleImageLoad={handleImageLoad}
-                    loadedImages={loadedImages}
-                  />
-                )}
-            </Accordion>
+            : <Container mx={{ base: 0, xl: "auto" }} px={0}>
+              <Group gap={"xs"} my={"xs"}>
+                <Text>Prix moyen du set :</Text>
+                <Text c={"green"} fw={"bold"}>{`${filteredCards.reduce((sum, card) => sum + (Number(card.averagePrice) || 0), 0).toFixed(2)} €`}</Text>
+              </Group>
+              <Accordion multiple variant="contained">
+                {filteredCards?.length > 0
+                  && filteredCards.map(card =>
+                    <CardsList
+                      key={card.id}
+                      set={set!}
+                      data={card}
+                      handleImageLoad={handleImageLoad}
+                    />
+                  )}
+              </Accordion>
+            </Container>
 
 
       }

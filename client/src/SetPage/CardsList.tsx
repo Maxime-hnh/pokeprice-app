@@ -13,14 +13,13 @@ interface CardListProps {
   set: Set;
   data: Card;
   handleImageLoad: (cardId: number) => void;
-  loadedImages: Record<string, boolean>;
 }
 
-const CardsList = ({ set, data, handleImageLoad, loadedImages }: CardListProps) => {
+const CardsList = ({ set, data, handleImageLoad }: CardListProps) => {
 
   const [card, setCard] = useState<Card>(data)
   const { getImageUrl } = tcgdexService;
-  const { searchOnEbay } = searchService;
+  const { searchOnEbay, searchOnVinted } = searchService;
   const [priceIsLoading, setPriceIsLoading] = useState<boolean>(false);
 
   // const updatePrices = async (serieId: string, setId: string, cardId: string) => {
@@ -41,7 +40,7 @@ const CardsList = ({ set, data, handleImageLoad, loadedImages }: CardListProps) 
   return (
     <Accordion.Item key={card.id} value={card.id.toString()}>
       <Accordion.Control>
-        <Group align="center" gap={3} justify="space-between" mr={15}>
+        <Group align="flex-start" wrap="nowrap" gap={3} justify="space-between" mr={15}>
           <Group>
             <Text fz={"xs"} className="titleFont">{card.name}</Text>
             <Group gap={"xs"}>
@@ -53,13 +52,14 @@ const CardsList = ({ set, data, handleImageLoad, loadedImages }: CardListProps) 
             </Group>
           </Group>
           {card.averagePrice
-            && <Pill fz={"xs"}>{`Prix moyen : ${card.averagePrice} €`}</Pill>
+            ? <Pill fz={"xs"}>{`Prix moyen : ${card.averagePrice} €`}</Pill>
+            : <Pill bg={"#fa52521a"} c={"#fa5252"} fw={"bold"} fz={"xs"}>Prix inconnu</Pill>
           }
         </Group>
       </Accordion.Control>
 
       <Accordion.Panel>
-        <Group pos={"relative"} wrap="nowrap">
+        <Group align="flex-start" pos={"relative"} wrap="nowrap">
           <Image
             w={"25%"}
             src={getImageUrl(card.image, "png", "low")}
@@ -131,7 +131,7 @@ const CardsList = ({ set, data, handleImageLoad, loadedImages }: CardListProps) 
                     w={50}
                     src={"/assets/vinted-logo.svg"}
                     onClick={() =>
-                      searchOnEbay(card.ebaySearchContent!)
+                      searchOnVinted(card.ebaySearchContent!)
                     }
                     style={{ cursor: 'pointer' }}
                   />

@@ -1,4 +1,4 @@
-import { Container, Divider, Grid, Group, LoadingOverlay, Paper, Text } from "@mantine/core";
+import { Chip, Container, Divider, Grid, Group, LoadingOverlay, Paper, Text } from "@mantine/core";
 import { Fragment, useEffect, useState } from "react";
 import { Card, CardWithVariantId } from "../_interfaces/card.interface";
 import { Box, Image, Skeleton } from "@mantine/core"
@@ -15,15 +15,25 @@ interface BinderListProps {
   myCards: FetchedUserCardVariantProps[];
   handleImageLoad: (cardId: number) => void;
   loadedImages: Record<string, boolean>;
+};
+
+interface PocketNumberProps {
+  pocket: number;
+  span: number;
+  totalSize: number
 }
 
 const BinderList = ({ cards, handleImageLoad, loadedImages }: BinderListProps) => {
 
-  const { loggedUser } = authService;
   const { getImageUrl } = tcgdexService;
+  const [pocketNumber, setPocketNumber] = useState<PocketNumberProps>({ pocket: 12, span: 3, totalSize: 24 })
 
-  const firstPageSize = 12;
-  const pageSize = 24;
+  let firstPageSize = pocketNumber.pocket;
+  const pageSize = pocketNumber.totalSize;
+  const options: Record<number, PocketNumberProps> = {
+    12: { pocket: 12, span: 3, totalSize: 24 },
+    9: { pocket: 9, span: 4, totalSize: 18 },
+  };
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [cardVariantIdIsLoading, setCardVariantIdIsLoading] = useState<{ [key: string]: boolean }>({})
@@ -127,8 +137,35 @@ const BinderList = ({ cards, handleImageLoad, loadedImages }: BinderListProps) =
     )
   };
 
+
   return (
     <Container mx={{ base: 0, xl: "auto" }} px={0}>
+      <Group my={"xs"}>
+        <Chip.Group
+          value={String(pocketNumber.pocket)}
+          onChange={(val) => setPocketNumber(options[Number(val)])}
+        >
+          <Group>
+            <Chip
+              styles={{ iconWrapper: { display: 'none' } }}
+              icon={<></>}
+              value="12"
+              color="#222"
+            >
+              12 pochettes
+            </Chip>
+            <Chip
+              styles={{ iconWrapper: { display: 'none' } }}
+
+              icon={<></>}
+              value="9"
+              color="#222"
+            >
+              9 pochettes
+            </Chip>
+          </Group>
+        </Chip.Group>
+      </Group>
       <Group justify="center"><Text mb={"xs"} fz={"md"} className="titleFont">{`${ownedCardsCount}/${duplicatedCards.length}`}</Text></Group>
       {/* Première page (seulement 12 cartes à droite) */}
       <Grid gutter="xl">
@@ -139,7 +176,7 @@ const BinderList = ({ cards, handleImageLoad, loadedImages }: BinderListProps) =
         <Grid.Col span={6}>
           <Grid>
             {firstPage.map((card: any) => (
-              <Grid.Col key={card.id + card.variantType} span={3} p={{ base: 3, md: 5, lg: 5, xl: 8 }}>
+              <Grid.Col key={card.id + card.variantType} span={pocketNumber.span} p={{ base: 3, md: 5, lg: 5, xl: 8 }}>
                 {CardWithSkeleton(card)}
               </Grid.Col>
             ))}
@@ -150,15 +187,15 @@ const BinderList = ({ cards, handleImageLoad, loadedImages }: BinderListProps) =
 
       {/* Pages normales (12 cartes à gauche, 12 cartes à droite) */}
       {pages.map((page, pageIndex) => {
-        const leftSide = page.slice(0, 12);
-        const rightSide = page.slice(12, 24);
+        const leftSide = page.slice(0, pocketNumber.pocket);
+        const rightSide = page.slice(pocketNumber.pocket, pocketNumber.totalSize);
         return (
           <Fragment key={pageIndex}>
             <Grid key={pageIndex + 1} gutter="md">
               <Grid.Col span={6}>
                 <Grid>
                   {leftSide.map((card: any) => (
-                    <Grid.Col key={card.id + card.variantType} span={3} p={{ base: 3, md: "xs" }}>
+                    <Grid.Col key={card.id + card.variantType} span={pocketNumber.span} p={{ base: 3, md: "xs" }}>
                       {CardWithSkeleton(card)}
                     </Grid.Col>
                   ))}
@@ -167,7 +204,7 @@ const BinderList = ({ cards, handleImageLoad, loadedImages }: BinderListProps) =
               <Grid.Col span={6}>
                 <Grid>
                   {rightSide.map((card: any) => (
-                    <Grid.Col key={card.id + card.variantType} span={3} p={{ base: 3, md: "xs" }}>
+                    <Grid.Col key={card.id + card.variantType} span={pocketNumber.span} p={{ base: 3, md: "xs" }}>
                       {CardWithSkeleton(card)}
                     </Grid.Col>
                   ))}
