@@ -1,5 +1,4 @@
 import { BehaviorSubject, Observable } from "rxjs";
-import { User } from "../_interfaces/user.interface";
 import { handleResponse } from "../_helpers/handleResponse";
 import { authHeader } from "../_helpers/auth-header";
 

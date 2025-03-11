@@ -14,7 +14,7 @@ interface Legal {
 }
 
 export interface Set {
-  id: string;
+  id: number;
   uid: string;
   code: string;
   name: string;

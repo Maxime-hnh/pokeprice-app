@@ -1,25 +1,23 @@
-import { Avatar, Box, Group, Image, Paper, SimpleGrid, Skeleton, Text, Title } from "@mantine/core";
+import { Box, Group, Image, Loader, Paper, SimpleGrid, Skeleton, Text } from "@mantine/core";
 import styles from './SetPage.module.scss';
 import { tcgdexService } from "../_services/tcgdex.service";
 import { searchService } from "../_services/search.service";
-import { Set } from "../_interfaces/set.interface";
-import { IconSearch } from "@tabler/icons-react";
-import { Card } from "../_interfaces/card.interface";
-import { FetchedUserCardVariantProps } from "../_interfaces/user-card-variants.interface";
 import { useMemo } from "react";
 import { formatCardCount, getRarityLogo, growLogoSizeList } from "../_helpers/helpers";
+import { setStore } from "../_store/set.store";
+import { cardStore } from "../_store/card.store";
+import { observer } from "mobx-react-lite";
 
 
 interface OnlyCardProps {
-  set: Set;
-  filteredCards: Card[];
-  myCards: FetchedUserCardVariantProps[];
   handleImageLoad: (cardId: number) => void;
   loadedImages: Record<string, boolean>;
 }
 
-const OnlyCard = ({ set, filteredCards, handleImageLoad, loadedImages }: OnlyCardProps) => {
+const OnlyCard = observer(({ handleImageLoad, loadedImages }: OnlyCardProps) => {
 
+  const { set } = setStore;
+  const { filteredCards } = cardStore;
   const { getImageUrl } = tcgdexService;
   const { searchOnEbay, searchOnVinted } = searchService;
   const reversedCards = useMemo(() => [...filteredCards].reverse(), [filteredCards]);
@@ -27,7 +25,7 @@ const OnlyCard = ({ set, filteredCards, handleImageLoad, loadedImages }: OnlyCar
   return (
     <SimpleGrid cols={{ base: 2, xs: 3, sm: 4, md: 5, lg: 6, xl: 7 }} spacing={"xs"}>
       {reversedCards?.length > 0
-        && reversedCards.map(card =>
+        ? reversedCards.map(card =>
           <Paper
             key={card.id}
             pos={"relative"}
@@ -36,7 +34,7 @@ const OnlyCard = ({ set, filteredCards, handleImageLoad, loadedImages }: OnlyCar
             style={{ overflow: "hidden" }}
             className={styles.onlyCard_img}
             withBorder
-            radius={"0.6rem"}
+            radius={"0.7rem 0.7rem 1.5rem 1.5rem"}
             shadow="md"
           >
             {!loadedImages[card.id] && (
@@ -72,7 +70,7 @@ const OnlyCard = ({ set, filteredCards, handleImageLoad, loadedImages }: OnlyCar
                   px={"0.3rem"}
                   py={"0.1rem"}
                   gap={5}
-                  style={{ borderRadius: "0 0.3rem 0 0", borderBottom: "1px solid white" }}
+                  style={{ borderRadius: "0 1rem 0 0", borderBottom: "1px solid white" }}
                 >
                   <Text fz={"xs"} fw={700}>
                     {formatCardCount(card, set!.cardCount.official!)}
@@ -107,9 +105,30 @@ const OnlyCard = ({ set, filteredCards, handleImageLoad, loadedImages }: OnlyCar
             </Group>
           </Paper>
         )
+        : Array.from({ length: 20 }).map((_, index) => (
+          <Paper
+            key={index}
+            pos={"relative"}
+            w={"100%"}
+            pt={"160%"}
+            style={{ overflow: "hidden" }}
+            className={styles.onlyCard_img}
+            withBorder
+            radius={"0.7rem 0.7rem 1.5rem 1.5rem"}
+            shadow="md"
+          >
+            <Skeleton
+              w={"100%"}
+              h={"100%"}
+              pos={"absolute"}
+              top={0}
+              left={0}
+            />
+          </Paper>
+        ))
       }
     </SimpleGrid >
   )
-}
+});
 
 export default OnlyCard;

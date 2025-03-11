@@ -24,23 +24,8 @@ const DetailsCard = ({ set, data, handleImageLoad, loadedImages }: DetailsCardPr
   const { getImageUrl } = tcgdexService;
   const { colorScheme } = useMantineColorScheme();
   const { searchOnEbay } = searchService;
-  const { updateEbayPrices } = cardService;
   const [priceIsLoading, setPriceIsLoading] = useState<boolean>(false);
 
-  const updatePrices = async (serieId: string, setId: string, cardId: string) => {
-    try {
-      setPriceIsLoading(true);
-      const updatedCard = await updateEbayPrices(serieId, setId, cardId)
-      if (updatedCard) {
-        setCard(updatedCard)
-        notifications.show({ message: `Les prix de la carte ${card.name} ont été mis à jour`, color: "green" })
-      }
-    } catch (error) {
-      notifications.show({ message: "Une erreur est survenue pendant la MAJ du prix", color: "red" })
-    } finally {
-      setPriceIsLoading(false);
-    }
-  }
 
   return (
     <Box

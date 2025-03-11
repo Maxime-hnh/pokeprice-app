@@ -1,6 +1,7 @@
 import { authHeader } from "../_helpers/auth-header";
 import { handleResponse } from "../_helpers/handleResponse";
 import { FetchedUserCardVariantProps } from "../_interfaces/user-card-variants.interface";
+import { cardStore } from "../_store/card.store";
 
 class UserCardVariantsService {
   constructor() {
@@ -27,7 +28,8 @@ class UserCardVariantsService {
       method: 'GET',
       headers: authHeader(),
     };
-    return await handleResponse(await fetch(`/api/userCardVariants`, requestOptions));
+    const response = await handleResponse(await fetch(`/api/userCardVariants`, requestOptions));
+    return cardStore.setMyCards(response);
   };
 
   ownedCardVariant = (

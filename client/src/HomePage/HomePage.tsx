@@ -1,33 +1,42 @@
 import { Accordion, Container, Group, Image, Paper, SimpleGrid, Text, Title } from "@mantine/core";
-import { useEffect, useState } from "react";
-import { Serie } from "../_interfaces/serie.interface";
+import { useEffect } from "react";
 import styles from './HomePage.module.scss';
 import { useNavigate } from "react-router-dom";
 import { serieService } from "../_services/serie.service";
+import { cardStore } from "../_store/card.store";
+import { observer } from "mobx-react-lite";
+import { serieStore } from "../_store/serie.store";
+import { setStore } from "../_store/set.store";
 
-const HomePage = () => {
+const HomePage = observer(() => {
 
-  const [series, setSeries] = useState<Serie[]>([]);
   const { getSeries } = serieService;
+  const { series } = serieStore;
+  const { setSet } = setStore;
+  const { setFilteredCards } = cardStore;
 
-  const loadSeries = async () => {
-    const data = await getSeries();
-    if (data) setSeries(data);
-  }
+
   const navigate = useNavigate();
 
-  useEffect(() => {
-    loadSeries();
-  }, [])
+  const openSet = (setId: number) => {
+    setFilteredCards([]);
+    setSet(null);
+    navigate(`/set/${setId}`)
+  };
 
+  useEffect(() => {
+    getSeries();
+  }, []);
+
+  if (!series || series.length === 0) return null;
   return (
     <Container p={0}>
-      <Accordion variant="separated" radius={"xl"}>
+      <Accordion variant="separated" multiple radius={"xl"} defaultValue={[`${series[0].id}`]}>
         {series?.length > 0
           && series.map(serie =>
             <Accordion.Item
               key={serie.id}
-              value={serie.name}
+              value={serie.id.toString()}
             >
               <Accordion.Control py={"sm"}>
                 <Group>
@@ -54,7 +63,7 @@ const HomePage = () => {
                         radius={"xl"}
                         display={"flex"}
                         style={{ cursor: 'pointer', justifyContent: 'center', alignItems: 'center' }}
-                        onClick={() => navigate(`/set/${set.id}`)}
+                        onClick={() => openSet(set.id)}
                       >
                         {set.logo
                           ? <Image
@@ -75,7 +84,8 @@ const HomePage = () => {
           )}
       </Accordion>
     </Container >
-  )
-}
+  );
+
+});
 
 export default HomePage;
