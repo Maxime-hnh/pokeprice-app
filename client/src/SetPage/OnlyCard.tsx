@@ -1,4 +1,4 @@
-import { Box, Group, Image, Loader, Paper, SimpleGrid, Skeleton, Text } from "@mantine/core";
+import { Box, Group, Image, Paper, SimpleGrid, Skeleton, Text } from "@mantine/core";
 import styles from './SetPage.module.scss';
 import { tcgdexService } from "../_services/tcgdex.service";
 import { searchService } from "../_services/search.service";
@@ -105,7 +105,7 @@ const OnlyCard = observer(({ handleImageLoad, loadedImages }: OnlyCardProps) => 
             </Group>
           </Paper>
         )
-        : Array.from({ length: 20 }).map((_, index) => (
+        : Array.from({ length: 16 }).map((_, index) => (
           <Paper
             key={index}
             pos={"relative"}

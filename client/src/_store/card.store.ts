@@ -4,6 +4,7 @@ import { FetchedUserCardVariantProps } from "../_interfaces/user-card-variants.i
 
 class CardStore {
   myCards: FetchedUserCardVariantProps[] = [];
+  cards: Card[] = [];
   filteredCards: Card[] = [];
 
   constructor() {
@@ -12,6 +13,10 @@ class CardStore {
 
   setMyCards = (cards: FetchedUserCardVariantProps[]) => {
     this.myCards = cards;
+  };
+
+  setCards = (cards: Card[]) => {
+    this.cards = cards;
   };
 
   setFilteredCards = (filteredCards: Card[]) => {

@@ -1,5 +1,5 @@
-import { Center, Group, Image, Input, SegmentedControl, Skeleton, Stack, Title, useMantineColorScheme } from "@mantine/core";
-import { useEffect, useMemo, useState } from "react";
+import { Center, CloseButton, Group, Image, Input, SegmentedControl, Skeleton, Stack, Title, useMantineColorScheme } from "@mantine/core";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { tcgdexService } from "../_services/tcgdex.service";
 import { IconBook, IconList, IconPlayCardStarFilled, IconSearch } from "@tabler/icons-react";
@@ -10,7 +10,6 @@ import AccordionList from "./AccordionList";
 import { setStore } from "../_store/set.store";
 import { observer } from "mobx-react-lite";
 import { cardStore } from "../_store/card.store";
-import { Card } from "../_interfaces/card.interface";
 
 enum CardView {
   LIST = "list",
@@ -26,24 +25,21 @@ const SetPage = observer(() => {
   const { getSetById } = setService;
 
   const { set } = setStore;
-  const { filteredCards, setFilteredCards } = cardStore;
-  const [originalCards, setOriginalCards] = useState<Card[]>([]);
+  const { cards, setFilteredCards } = cardStore;
   const [searchValue, setSearchValue] = useState<string>("");
   const { colorScheme } = useMantineColorScheme();
   const [view, setView] = useState<CardView>(CardView.ONLYCARD)
 
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.toLowerCase();
+  const handleSearchChange = (value: string) => {
     setSearchValue(value);
-
-    if (!value) {
-      setFilteredCards(originalCards);
+    if (value === "") {
+      setFilteredCards(cards);
       return;
-    }
+    };
 
-    const filtered = originalCards.filter((card) =>
+    const filtered = cards.filter((card) =>
       card.name.toLowerCase().includes(value)
     );
     setFilteredCards(filtered);
@@ -56,14 +52,8 @@ const SetPage = observer(() => {
     }));
   };
 
-  const loadSet = async (setId: string) => {
-    await getSetById(Number(setId!));
-    setOriginalCards(filteredCards);
-  };
-
-
   useEffect(() => {
-    loadSet(setId!)
+    getSetById(Number(setId!))
   }, [])
 
   return (
@@ -86,7 +76,15 @@ const SetPage = observer(() => {
           leftSection={<IconSearch color={colorScheme === "dark" ? "yellow" : "#495057"} />}
           placeholder="Rechercher un pokémon..."
           value={searchValue}
-          onChange={handleSearchChange}
+          onChange={(e) => handleSearchChange(e.target.value.toLowerCase())}
+          rightSectionPointerEvents="all"
+          rightSection={
+            <CloseButton
+              aria-label="Clear input"
+              onClick={() => handleSearchChange("")}
+              style={{ display: searchValue ? undefined : 'none' }}
+            />
+          }
 
         />
         <SegmentedControl
