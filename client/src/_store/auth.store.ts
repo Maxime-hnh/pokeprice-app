@@ -1,5 +1,5 @@
 // import { browserLocalPersistence, onAuthStateChanged, setPersistence, signInAnonymously } from "firebase/auth";
-import { action, makeObservable, observable } from "mobx";
+import { action, computed, makeObservable, observable } from "mobx";
 // import { auth } from "../_config/firebaseConfig";
 
 class AuthStore {
@@ -12,22 +12,9 @@ class AuthStore {
       idToken: observable,
       loggedUser: observable,
       setLoggedUser: action,
-      setIdToken: action
+      setIdToken: action,
+      isLoggedIn: computed
     });
-
-
-    // onAuthStateChanged(auth, async (user) => {
-    //   await setPersistence(auth, browserLocalPersistence)
-    //   if (user) {
-    //     await user.getIdToken(true).then(async (newToken) => {
-    //       this.setIdToken(newToken)
-    //       this.setLoggedUser(user)
-    //     })
-    //   } else {
-    //     this.clearToken()
-    //   }
-    // });
-
   }
 
   setIdToken(idToken: string) {
@@ -46,6 +33,10 @@ class AuthStore {
     localStorage.removeItem('loggedUser');
     // auth.signOut();
   };
+
+  get isLoggedIn() {
+    return !!this.loggedUser;
+  }
 }
 
 export const authStore = new AuthStore();

@@ -1,6 +1,7 @@
 import { BehaviorSubject, Observable } from "rxjs";
 import { handleResponse } from "../_helpers/handleResponse";
 import { authHeader } from "../_helpers/auth-header";
+import { authStore } from "../_store/auth.store";
 
 export enum AuthRole {
   SUPERADMIN = "superadmin",
@@ -50,7 +51,7 @@ class AuthService {
     };
     const response = await fetch(`/api/auth/login`, requestOptions);
     const user = await handleResponse(response);
-    localStorage.setItem('loggedUser', JSON.stringify(user));
+    authStore.setLoggedUser(user)
     this.loggedUserSubject.next(user);
     return user;
   }

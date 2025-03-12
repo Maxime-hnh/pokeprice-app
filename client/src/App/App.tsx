@@ -1,7 +1,5 @@
 import {
   AppShell,
-  Burger,
-  Button,
   createTheme,
   Group,
   Image,
@@ -27,10 +25,9 @@ import HomePage from '../HomePage/HomePage';
 import SetPage from '../SetPage/SetPage';
 import AuthPage from '../AuthPage/AuthPage';
 import { ModalsProvider } from '@mantine/modals';
-import LoginPopover from '../_components/LoginPopover';
+import LoginButton from '../_components/LoginButton';
 import AdminPage from '../AdminPage/AdminPage';
 import ProtectedRoute from '../_components/security/ProtectedRoute';
-import SwitchTheme from '../_components/SwitchTheme';
 
 const App = () => {
 
@@ -85,14 +82,14 @@ const App = () => {
                 {/* <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" /> */}
                 <Image
                   w={120}
-                  src={"/assets/pokeprice_logo.png"}
+                  src={"/assets/poketrack_logo.png"}
                   style={{ cursor: 'pointer' }}
                   onClick={() => navigate('/')}
                 />
               </Group>
               <Group>
                 {/* <SwitchTheme /> */}
-                <LoginPopover />
+                <LoginButton />
               </Group>
             </Group>
           </AppShell.Header>
