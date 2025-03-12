@@ -76,6 +76,7 @@ const FilterCard = observer(() => {
           />
         }
         style={{ flex: isMobile ? 1 : '' }}
+        styles={{input: {fontSize:16}}}
         w={isMobile ? '' : 350}
       />
       <Menu closeOnItemClick={false} shadow="md" width={225} transitionProps={{ transition: 'rotate-right', duration: 150 }} offset={1}>
