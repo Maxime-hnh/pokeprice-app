@@ -1,11 +1,12 @@
 import { makeAutoObservable } from "mobx";
-import { Card } from "../_interfaces/card.interface";
+import { Card, Rarity } from "../_interfaces/card.interface";
 import { FetchedUserCardVariantProps } from "../_interfaces/user-card-variants.interface";
 
 class CardStore {
   myCards: FetchedUserCardVariantProps[] = [];
   cards: Card[] = [];
   filteredCards: Card[] = [];
+  uniqueRarities: Rarity[] = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -22,6 +23,10 @@ class CardStore {
   setFilteredCards = (filteredCards: Card[]) => {
     this.filteredCards = filteredCards;
   };
+
+  setUniqueRarities = () => {
+    this.uniqueRarities = Array.from(new Set(this.cards.map(card => card.rarity)));
+  }
 
 
 }

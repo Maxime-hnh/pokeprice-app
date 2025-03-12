@@ -25,7 +25,7 @@ interface PocketNumberProps {
 const BinderList = observer(({ handleImageLoad, loadedImages }: BinderListProps) => {
 
   const { getImageUrl } = tcgdexService;
-  const { filteredCards, myCards } = cardStore;
+  const { cards, myCards } = cardStore;
   const [pocketNumber, setPocketNumber] = useState<PocketNumberProps>({ pocket: 12, span: 3, totalSize: 24 })
 
   let firstPageSize = pocketNumber.pocket;
@@ -53,7 +53,7 @@ const BinderList = observer(({ handleImageLoad, loadedImages }: BinderListProps)
   }, []);
 
 
-  const duplicatedCards: CardWithVariantId[] = filteredCards.flatMap((card) =>
+  const duplicatedCards: CardWithVariantId[] = cards.flatMap((card) =>
     card.variants.map((variant) => ({
       ...card,
       variantType: variant.cardVariant.type,

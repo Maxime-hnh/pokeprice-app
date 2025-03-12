@@ -1,6 +1,7 @@
-import { Card, CardBrief } from "../_interfaces/card.interface";
+import { Card } from "../_interfaces/card.interface";
 import { handleResponse } from "../_helpers/handleResponse";
 import { authHeader } from "../_helpers/auth-header";
+import { cardStore } from "../_store/card.store";
 
 const UPDATE_EBAYPRICES_URL = import.meta.env.VITE_FIREBASE_FUNCTION_UPDATE_EBAYPRICES_FOR_CARDID;
 
@@ -43,6 +44,10 @@ class CardService {
       throw error;
     }
   }
+
+  filterByRarity = (rarities: string[]): Card[] => {
+    return cardStore.cards.filter(card => rarities.includes(card.rarity))
+  };
 }
 
 export const cardService = new CardService();

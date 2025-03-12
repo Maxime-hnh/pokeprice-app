@@ -32,6 +32,21 @@ export const formatCardCount = (card: Card, countOfficial: number): string => {
   return `${card.localId}/${countOfficial}`
 };
 
+export const secretRareList = [
+  Rarity.SECRET_RARE,
+  Rarity.HOLO_RARE_V,
+  Rarity.HOLO_RARE_VMAX,
+  Rarity.HOLO_RARE_VSTAR,
+  Rarity.SHINY_RARE_VMAX,
+  Rarity.SHINY_RARE_V,
+  Rarity.SHINY_RARE,
+  Rarity.RARE_HOLO_LVX,
+  Rarity.RADIANT_RARE,
+  Rarity.LEGEND,
+  Rarity.TRAINER_FULL_ART,
+  Rarity.RARE_PRIME
+];
+
 export const getRarityLogo = (rarity: Rarity): string => {
   const commonList = [Rarity.COMMON]
   const uncommonList = [Rarity.UNCOMMON]
@@ -45,7 +60,6 @@ export const getRarityLogo = (rarity: Rarity): string => {
   const highTechList = [Rarity.HIGH_TECH_RARE]
   const magnificentList = [Rarity.MAGNIFICENT]
   const promoList = [Rarity.NO_RARITY]
-  const secretRareList = [Rarity.SECRET_RARE, Rarity.HOLO_RARE_V, Rarity.HOLO_RARE_VMAX, Rarity.HOLO_RARE_VSTAR, Rarity.SHINY_RARE_VMAX, Rarity.SHINY_RARE_V, Rarity.SHINY_RARE, Rarity.RARE_HOLO_LVX, Rarity.RADIANT_RARE, Rarity.LEGEND, Rarity.TRAINER_FULL_ART, Rarity.RARE_PRIME]
 
   switch (true) {
     case commonList.includes(rarity):

@@ -24,7 +24,8 @@ class SetService {
     const response = await handleResponse(await fetch(`/api/sets/${id}`, requestOptions));
     setStore.setSet(response)
     cardStore.setCards(response.cards)
-    return cardStore.setFilteredCards(response.cards)
+    cardStore.setUniqueRarities()
+    return cardStore.setFilteredCards(response.cards.reverse())
   };
 };
 

@@ -8,6 +8,7 @@ import { formatCardCount, getRarityLogo, growLogoSizeList } from "../_helpers/he
 import { setStore } from "../_store/set.store";
 import { cardStore } from "../_store/card.store";
 import { observer } from "mobx-react-lite";
+import FilterCard from "./FilterCard";
 
 const AccordionList = observer(() => {
 
@@ -19,6 +20,7 @@ const AccordionList = observer(() => {
 
   return (
     <Container mx={{ base: 0, xl: "auto" }} px={0}>
+      <FilterCard />
       <Group gap={"xs"} my={"xs"}>
         <Text>Prix moyen du set :</Text>
         <Text c={"green"} fw={"bold"}>{`${filteredCards.reduce((sum, card) => sum + (Number(card.averagePrice) || 0), 0).toFixed(2)} €`}</Text>
