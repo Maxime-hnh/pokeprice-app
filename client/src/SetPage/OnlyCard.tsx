@@ -74,7 +74,7 @@ const OnlyCard = observer(({ handleImageLoad, loadedImages }: OnlyCardProps) => 
                     gap={5}
                     style={{ borderRadius: "0 1rem 0 0", borderBottom: "1px solid white" }}
                   >
-                    <Text fz={"0.5rem"} fw={700}>
+                    <Text fz={"xs"} fw={700}>
                       {formatCardCount(card, set?.cardCount.official!)}
                     </Text>
                     <Image
