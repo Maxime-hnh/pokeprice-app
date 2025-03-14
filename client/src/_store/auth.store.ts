@@ -31,7 +31,6 @@ class AuthStore {
     this.idToken = null;
     localStorage.removeItem('idToken');
     localStorage.removeItem('loggedUser');
-    // auth.signOut();
   };
 
   get isLoggedIn() {

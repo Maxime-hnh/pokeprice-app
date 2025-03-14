@@ -34,28 +34,6 @@ class TCGDexService {
   }
 
 
-  getSeriesWithSet = async (): Promise<Serie[] | void> => {
-    const series = await this.getSeries();
-    const sets = await this.getSets();
-    if (sets) {
-      const customSets = sets.map((set: Set) => (
-        {
-          ...set,
-          logo: this.getImageUrl(set.logo!, 'png')
-        }
-      ))
-      const customSeries = series!.map((serie: Serie, index: number) => (
-        {
-          ...serie,
-          index,
-          logo: this.getImageUrl(serie.logo!, 'png'),
-          sets: customSets.filter((set: Set) => set.id.startsWith(serie.id))
-        }
-      ))
-      return customSeries
-    }
-  }
-
   searchCard = async (searchValue: string, serie?: string): Promise<Card[] | void> => {
     if (serie) {
       return await handleResponse(await fetch(`https://api.tcgdex.net/v2/fr/cards?id=like:${serie}&name=like:${searchValue}`));

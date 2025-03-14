@@ -6,7 +6,7 @@ export declare type UserProps = {
 };
 
 export type FetchedUser = {
-  uid: number;
+  id: number;
 } & UserProps;
 
 export class User implements UserProps {

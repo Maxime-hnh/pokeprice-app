@@ -26,6 +26,14 @@ class CardService {
     return await handleResponse(await fetch(`/api/cards/${id}`, requestOptions));
   };
 
+  getCardsByIdsForWishList = async (ids: number[]): Promise<Card[]> => {
+    const requestOptions = {
+      method: 'GET',
+      headers: authHeader(),
+    };
+    return await handleResponse(await fetch(`/api/cards/ids/${ids}`, requestOptions));
+  };
+
   //
   updateEbayPrices = async (serieId: string, setId: string, cardId: string): Promise<Card | void> => {
     const requestOptions: RequestInit = {

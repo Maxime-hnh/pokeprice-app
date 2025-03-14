@@ -4,6 +4,7 @@ import { FetchedUserCardVariantProps } from "../_interfaces/user-card-variants.i
 
 class CardStore {
   myCards: FetchedUserCardVariantProps[] = [];
+  myWishList: FetchedUserCardVariantProps[] = [];
   cards: Card[] = [];
   filteredCards: Card[] = [];
   uniqueRarities: Rarity[] = [];
@@ -14,6 +15,10 @@ class CardStore {
 
   setMyCards = (cards: FetchedUserCardVariantProps[]) => {
     this.myCards = cards;
+  };
+
+  setMyWishList = (wishList: FetchedUserCardVariantProps[]) => {
+    this.myWishList = wishList;
   };
 
   setCards = (cards: Card[]) => {

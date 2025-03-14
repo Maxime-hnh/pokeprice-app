@@ -1,12 +1,12 @@
 import { Accordion, Container, Group, Image, Loader, Pill, Table, Text } from "@mantine/core";
 import { useState } from "react";
-import { tcgdexService } from "../_services/tcgdex.service";
-import { searchService } from "../_services/search.service";
+import { tcgdexService } from "../../_services/tcgdex.service";
+import { searchService } from "../../_services/search.service";
 import { IconRefresh } from "@tabler/icons-react";
 import dayjs from "dayjs";
-import { formatCardCount, getRarityLogo, growLogoSizeList } from "../_helpers/helpers";
-import { setStore } from "../_store/set.store";
-import { cardStore } from "../_store/card.store";
+import { formatCardCount, getRarityLogo, growLogoSizeList } from "../../_helpers/helpers";
+import { setStore } from "../../_store/set.store";
+import { cardStore } from "../../_store/card.store";
 import { observer } from "mobx-react-lite";
 import FilterCard from "./FilterCard";
 

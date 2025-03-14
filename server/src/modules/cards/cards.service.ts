@@ -34,6 +34,20 @@ export class CardsService {
     return this.prisma.card.findMany()
   };
 
+  async getByIds(ids: number[]): Promise<Card[]> {
+    return this.prisma.card.findMany({
+      where: {
+        id: {
+          in: ids
+        }
+      },
+      include: {
+        variants: true,
+        set: true
+      }
+    });
+  };
+
   async getBySetId(setId: number): Promise<Card[]> {
     return this.prisma.card.findMany({
       where: { setId }
@@ -71,6 +85,8 @@ export class CardsService {
   async updatePrices(serieId: number): Promise<any> {
     const serie = await this.serieSerive.getById(serieId);
     const sets = await this.setService.getAllBySerieId(serie!.id)
+    // const set = await this.setService.getById(148)
+
 
     const totalCards = sets.map(set => set.cards.length).reduce((sum, count) => sum + count, 0);
 

@@ -1,15 +1,15 @@
 import { Badge, Box, Group, Image, Loader, Paper, Skeleton, Stack, Text, Title, useMantineColorScheme } from "@mantine/core";
 import styles from './SetPage.module.scss';
 import { IconArrowRightBar, IconExternalLink, IconRefresh, IconTrendingDown, IconTrendingUp } from "@tabler/icons-react";
-import { tcgdexService } from "../_services/tcgdex.service";
-import { searchService } from "../_services/search.service";
-import { Set } from "../_interfaces/set.interface";
+import { tcgdexService } from "../../_services/tcgdex.service";
+import { searchService } from "../../_services/search.service";
+import { Set } from "../../_interfaces/set.interface";
 import dayjs from "dayjs";
-import { cardService } from "../_services/card.service";
+import { cardService } from "../../_services/card.service";
 import { useState } from "react";
 import { notifications } from "@mantine/notifications";
-import { Card } from "../_interfaces/card.interface";
-import { FetchedUserCardVariantProps } from "../_interfaces/user-card-variants.interface";
+import { Card } from "../../_interfaces/card.interface";
+import { FetchedUserCardVariantProps } from "../../_interfaces/user-card-variants.interface";
 
 interface DetailsCardProps {
   set: Set;

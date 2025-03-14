@@ -1,15 +1,15 @@
 import { Chip, Container, Divider, Grid, Group, LoadingOverlay, Paper, Text } from "@mantine/core";
 import { Fragment, useEffect, useState } from "react";
-import { CardWithVariantId } from "../_interfaces/card.interface";
+import { CardWithVariantId } from "../../_interfaces/card.interface";
 import { Box, Image, Skeleton } from "@mantine/core"
 import styles from './SetPage.module.scss';
-import { tcgdexService } from "../_services/tcgdex.service";
-import { userCardVariantsService } from "../_services/user-cards-variants.service";
-import { authService } from "../_services/auth.service";
-import { countOwnedCards } from "../_helpers/helpers";
+import { tcgdexService } from "../../_services/tcgdex.service";
+import { userCardVariantsService } from "../../_services/user-cards-variants.service";
+import { authService } from "../../_services/auth.service";
+import { countOwnedCards } from "../../_helpers/helpers";
 import { notifications } from "@mantine/notifications";
 import { observer } from "mobx-react-lite";
-import { cardStore } from "../_store/card.store";
+import { cardStore } from "../../_store/card.store";
 
 interface BinderListProps {
   handleImageLoad: (cardId: number) => void;
@@ -37,12 +37,12 @@ const BinderList = observer(({ handleImageLoad, loadedImages }: BinderListProps)
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [cardVariantIdIsLoading, setCardVariantIdIsLoading] = useState<{ [key: string]: boolean }>({})
-  const { ownedCardVariant, unlinkUserCardVariant, linkUserCardVariant, getAllUserCardsByUserId } = userCardVariantsService;
+  const { ownedCardVariant, unlinkUserCardVariant, linkOrUpdateUserCardVariant, getAllOwnedUserCardsByUserId } = userCardVariantsService;
 
   const loadUserCardVariants = async () => {
     if (authService.loggedUserValue) {
       setIsLoading(true);
-      await getAllUserCardsByUserId();
+      await getAllOwnedUserCardsByUserId();
       setIsLoading(false);
     };
     return;
@@ -82,7 +82,7 @@ const BinderList = observer(({ handleImageLoad, loadedImages }: BinderListProps)
       await unlinkUserCardVariant(cardId, cardVariantId);
       await loadUserCardVariants();
     } else {
-      await linkUserCardVariant(cardId, cardVariantId);
+      await linkOrUpdateUserCardVariant(cardId, cardVariantId, { type: "own" });
       await loadUserCardVariants();
     }
     setCardVariantIdIsLoading(prev => ({ ...prev, [key]: false }));

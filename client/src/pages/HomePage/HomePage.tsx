@@ -1,12 +1,13 @@
 import { Accordion, Container, Group, Image, Paper, SimpleGrid, Text, Title } from "@mantine/core";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from './HomePage.module.scss';
 import { useNavigate } from "react-router-dom";
-import { serieService } from "../_services/serie.service";
-import { cardStore } from "../_store/card.store";
+import { serieService } from "../../_services/serie.service";
+import { cardStore } from "../../_store/card.store";
 import { observer } from "mobx-react-lite";
-import { serieStore } from "../_store/serie.store";
-import { setStore } from "../_store/set.store";
+import { serieStore } from "../../_store/serie.store";
+import { setStore } from "../../_store/set.store";
+import PikachuLoader from "../../_components/PikachuLoader";
 
 const HomePage = observer(() => {
 
@@ -14,7 +15,7 @@ const HomePage = observer(() => {
   const { series } = serieStore;
   const { setSet } = setStore;
   const { setFilteredCards } = cardStore;
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -24,17 +25,32 @@ const HomePage = observer(() => {
     navigate(`/set/${setId}`)
   };
 
+  const loadSeries = async () => {
+    try {
+      if (!series || series.length === 0) {
+        setIsLoading(true)
+        await getSeries();
+      }
+      return;
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   useEffect(() => {
-    getSeries();
+    loadSeries();
   }, []);
 
-  if (!series || series.length === 0) return null;
+  if (isLoading) return <PikachuLoader />
   return (
     <Container p={0}>
-      <Accordion variant="separated" multiple radius={"xl"} defaultValue={[`${series[0].id}`]}>
+      <Accordion variant="separated" multiple radius={"lg"} defaultValue={[]}>
         {series?.length > 0
           && series.map(serie =>
             <Accordion.Item
+            className={styles.test}
               key={serie.id}
               value={serie.id.toString()}
             >
@@ -42,7 +58,7 @@ const HomePage = observer(() => {
                 <Group>
                   <Image
                     src={"/pokeball.png"}
-                    w={40}
+                    w={30}
                   />
                   <Title className={styles.title} order={3}>{serie.name}</Title>
                 </Group>

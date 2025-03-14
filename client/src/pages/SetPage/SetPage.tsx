@@ -1,13 +1,13 @@
 import { Center, Group, Image, SegmentedControl, Skeleton, Stack, Title, useMantineColorScheme } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { tcgdexService } from "../_services/tcgdex.service";
+import { tcgdexService } from "../../_services/tcgdex.service";
 import { IconBook, IconList, IconPlayCardStarFilled } from "@tabler/icons-react";
 import OnlyCard from "./OnlyCard";
-import { setService } from "../_services/set.service";
+import { setService } from "../../_services/set.service";
 import BinderList from "./BinderList";
 import AccordionList from "./AccordionList";
-import { setStore } from "../_store/set.store";
+import { setStore } from "../../_store/set.store";
 import { observer } from "mobx-react-lite";
 
 enum CardView {
@@ -93,7 +93,7 @@ const SetPage = observer(() => {
           ]} />
       </Stack>
       <div style={{ display: view === CardView.ONLYCARD ? "block" : "none" }}>
-        <OnlyCard handleImageLoad={handleImageLoad} loadedImages={loadedImages} />
+        <OnlyCard handleImageLoad={handleImageLoad} loadedImages={loadedImages} withFilterBar={true} />
       </div>
       <div style={{ display: view === CardView.BINDER ? "block" : "none" }}>
         <BinderList loadedImages={loadedImages} handleImageLoad={handleImageLoad} />

@@ -1,33 +1,83 @@
-import { Box, Group, Image, Paper, SimpleGrid, Skeleton, Stack, Text } from "@mantine/core";
+import { ActionIcon, Box, Group, Image, Paper, SimpleGrid, Skeleton, Stack, Text } from "@mantine/core";
 import styles from './SetPage.module.scss';
-import { tcgdexService } from "../_services/tcgdex.service";
-import { searchService } from "../_services/search.service";
-import { formatCardCount, getRarityLogo, growLogoSizeList } from "../_helpers/helpers";
-import { setStore } from "../_store/set.store";
-import { cardStore } from "../_store/card.store";
+import { tcgdexService } from "../../_services/tcgdex.service";
+import { searchService } from "../../_services/search.service";
+import { formatCardCount, getRarityLogo, growLogoSizeList } from "../../_helpers/helpers";
+import { setStore } from "../../_store/set.store";
+import { cardStore } from "../../_store/card.store";
 import { observer } from "mobx-react-lite";
-import { Card } from "../_interfaces/card.interface";
 import FilterCard from "./FilterCard";
+import { IconHeart, IconHeartFilled } from "@tabler/icons-react";
+import { userCardVariantsService } from "../../_services/user-cards-variants.service";
+import { notifications } from "@mantine/notifications";
+import { useEffect, useState } from "react";
+import { authStore } from "../../_store/auth.store";
+import { Card } from "../../_interfaces/card.interface";
 
 
 interface OnlyCardProps {
   handleImageLoad: (cardId: number) => void;
   loadedImages: Record<string, boolean>;
+  cards?: Card[];
+  withFilterBar: boolean;
 }
 
-const OnlyCard = observer(({ handleImageLoad, loadedImages }: OnlyCardProps) => {
+const OnlyCard = observer(({ handleImageLoad, loadedImages, cards, withFilterBar }: OnlyCardProps) => {
 
   const { set } = setStore;
-  const { filteredCards } = cardStore;
+  const { isLoggedIn } = authStore;
+  const { filteredCards, myWishList } = cardStore;
   const { getImageUrl } = tcgdexService;
   const { searchOnEbay, searchOnVinted } = searchService;
+  const { linkOrUpdateUserCardVariant, existInWishList, getAllWishListUserCardsByUserId, unlinkUserCardVariant } = userCardVariantsService;
+  const [isLoading, setIsLoading] = useState<Record<string, boolean>>({});
+
+  const displayCards = cards ?? filteredCards
+
+  const addToWishList = async (cardId: number, cardVariantId: number) => {
+    try {
+      if (!isLoggedIn) {
+        return notifications.show({
+          message: "Vous devez être connecté pour ajouter la carte",
+          color: 'red'
+        })
+      };
+      setIsLoading(prev => ({ ...prev, [cardId]: true }))
+      if (existInWishList(myWishList, cardId, cardVariantId)) {
+        await unlinkUserCardVariant(cardId, cardVariantId);
+        await loadWishListCards();
+      } else {
+        await linkOrUpdateUserCardVariant(cardId, cardVariantId, { type: "wishList" });
+        await loadWishListCards();
+        notifications.show({
+          message: `Carte ajoutée à la wish list !`,
+          color: 'green'
+        })
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsLoading(prev => ({ ...prev, [cardId]: false }))
+    }
+  };
+
+  const loadWishListCards = async () => {
+    if (isLoggedIn) {
+      await getAllWishListUserCardsByUserId();
+    };
+    return;
+  };
+
+  useEffect(() => {
+    loadWishListCards();
+  }, [isLoggedIn]);
 
   return (
     <Stack>
-      <FilterCard />
+      {withFilterBar && <FilterCard />}
       <SimpleGrid cols={{ base: 2, xs: 3, sm: 4, md: 5, lg: 6, xl: 7 }} spacing={"xs"}>
-        {filteredCards?.length > 0
-          ? filteredCards.map(card =>
+        {displayCards?.length > 0
+          ? displayCards.map(card =>
             <Paper
               key={card.id}
               pos={"relative"}
@@ -75,7 +125,7 @@ const OnlyCard = observer(({ handleImageLoad, loadedImages }: OnlyCardProps) => 
                     style={{ borderRadius: "0 1rem 0 0", borderBottom: "1px solid white" }}
                   >
                     <Text fz={"xs"} fw={700}>
-                      {formatCardCount(card, set?.cardCount.official!)}
+                      {formatCardCount(card, set?.cardCount.official! ?? card.set!.cardCount.official!)}
                     </Text>
                     <Image
                       src={getRarityLogo(card.rarity)}
@@ -85,6 +135,23 @@ const OnlyCard = observer(({ handleImageLoad, loadedImages }: OnlyCardProps) => 
                 </Box>
 
               </Box>
+              <ActionIcon
+                style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
+                radius={"xl"}
+                color="white"
+                pos={"absolute"}
+                size={"lg"}
+                top={3}
+                right={4}
+                onClick={() => addToWishList(card.id, card.variants[0].cardVariantId)}
+                loading={isLoading[card.id]}
+                loaderProps={{ size: "xs", color: "red" }}
+              >
+                {existInWishList(myWishList, card.id, card.variants[0].cardVariantId)
+                  ? <IconHeartFilled color="red" />
+                  : <IconHeart color={"red"} />
+                }
+              </ActionIcon>
 
               <Group bottom={10} left={0} pos={"absolute"} justify="space-evenly" w={"100%"}>
 

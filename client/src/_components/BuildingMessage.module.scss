@@ -1,0 +1,36 @@
+.root {
+  // padding-top: 80px
+  // padding-bottom: 80px;
+  padding: 0 0 10px 0;
+}
+
+.title {
+  font-weight: 900;
+  font-size: 34px;
+  margin-bottom: 2rem;
+  font-family: Greycliff CF,
+    var(--mantine-font-family), serif;
+
+  @media (max-width: 767px) {
+    font-size: 32px;
+    text-align: center;
+  }
+}
+
+.control {
+  @media (max-width: 767px) {
+    width: 100%;
+  }
+}
+
+.mobileImage {
+  @media (min-width: 48em) {
+    display: none;
+  }
+}
+
+.desktopImage {
+  @media (max-width: 47.99em) {
+    display: none;
+  }
+}

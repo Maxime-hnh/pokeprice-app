@@ -27,7 +27,7 @@ export async function handleResponse<TData = any>(response: Response): Promise<a
         if (loggedUser && loggedUser.refreshToken) {
           const newLoggedUser = await authService.refreshToken()
           if (newLoggedUser) {
-            return await retryOriginalRequest(response, newLoggedUser.refreshToken);
+            return await retryOriginalRequest(response, newLoggedUser.accessToken);
           } else {
             authService.logout();
             window.location.reload();

@@ -15,10 +15,19 @@ export class CardsController {
     return await this.cardsService.getAll()
   };
 
+
   @Get(':id')
   @HttpCode(200)
   async getById(@Param('id') id: string): Promise<Card | null> {
     return await this.cardsService.getById(Number(id))
+  };
+
+  @Get('/ids/:ids')
+  @HttpCode(200)
+  async getByIds(@Param('ids') ids: string): Promise<Card[] | void> {
+    const idsArray = ids.split(',').map(Number).filter(id => !isNaN(id));
+    const data = await this.cardsService.getByIds(idsArray)
+    return data
   };
 
   @Put('/price/:id')

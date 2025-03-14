@@ -2,10 +2,10 @@ import { ActionIcon, CloseButton, Group, Image, Input, Menu, Switch, Text, useMa
 import { useContext, useEffect, useState } from "react";
 import { IconCheck, IconFilter, IconSearch, IconSortAscendingNumbers, IconSortDescendingNumbers, IconX } from "@tabler/icons-react";
 import { observer } from "mobx-react-lite";
-import { cardStore } from "../_store/card.store";
-import { getRarityLogo, growLogoSizeList } from "../_helpers/helpers";
-import { cardService } from "../_services/card.service";
-import AppContext from "../App/AppContext";
+import { cardStore } from "../../_store/card.store";
+import { getRarityLogo, growLogoSizeList } from "../../_helpers/helpers";
+import { cardService } from "../../_services/card.service";
+import AppContext from "../../App/AppContext";
 
 
 const FilterCard = observer(() => {
@@ -81,7 +81,7 @@ const FilterCard = observer(() => {
       />
       <Menu closeOnItemClick={false} shadow="md" width={225} transitionProps={{ transition: 'rotate-right', duration: 150 }} offset={1}>
         <Menu.Target>
-          <ActionIcon size={"lg"} color="#495057" radius={"xl"}>
+          <ActionIcon size={"lg"} color="dark" radius={"xl"}>
             <IconFilter color="white" size={20} />
           </ActionIcon>
         </Menu.Target>

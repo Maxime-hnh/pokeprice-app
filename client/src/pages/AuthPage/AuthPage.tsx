@@ -5,8 +5,8 @@ import { observer } from "mobx-react-lite"
 import styles from './AuthPage.module.scss';
 import { useLocation, useNavigate } from "react-router-dom"
 import { notifications } from "@mantine/notifications"
-import { AuthenticationRequest, authService } from "../_services/auth.service"
-import { userService } from "../_services/user.service";
+import { userService } from "../../_services/user.service";
+import { AuthenticationRequest, authService } from "../../_services/auth.service";
 
 const AuthPage = observer(() => {
 
@@ -34,7 +34,7 @@ const AuthPage = observer(() => {
       await signup(values);
     } else {
       await login(values);
-      navigate(location.state.from);
+      navigate(location.state.from ?? "/");
       notifications.show({ message: "Connexion réussie !", color: "green" })
     }
   };

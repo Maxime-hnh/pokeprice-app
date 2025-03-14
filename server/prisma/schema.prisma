@@ -142,7 +142,8 @@ model UserCardVariant {
   cardVariantId     Int
   cardVariantOnCard CardVariantOnCard @relation(fields: [cardId, cardVariantId], references: [cardId, cardVariantId])
 
-  quantity Int @default(1)
+  quantity Int    @default(1)
+  type     String @default("own")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
